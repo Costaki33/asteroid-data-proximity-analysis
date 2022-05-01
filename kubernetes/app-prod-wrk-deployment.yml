@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-client-debug-deployment
+  labels:
+    app: redis-client-debug
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis-client-debug
+  template:
+    metadata:
+      labels:
+        app: redis-client-debug
+    spec:
+      containers:
+        - name: py39
+          image: jstubbs/redis-client
+          command: ['sleep', '999999999']

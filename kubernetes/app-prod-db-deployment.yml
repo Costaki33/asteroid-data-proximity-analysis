@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abdon01-test-deployment
+  labels:
+    username: abdon01
+    env: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: abdon01-test-redis
+  template:
+    metadata:
+      labels:
+        username: abdon01
+        env: test
+        app: abdon01-test-redis
+    spec:
+      containers:
+        - name: redisdep
+          image: redis:6
+          volumeMounts:
+          - name: abdon01-test-pvc
+            mountPath: "/data"
+      volumes:
+      - name: abdon01-test-pvc
+        persistentVolumeClaim:
+          claimName: abdon01-test-pvc

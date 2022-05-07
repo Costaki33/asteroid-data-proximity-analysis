@@ -1,0 +1,17 @@
+FROM centos:7.9.2009
+
+RUN yum update -y && \
+    yum install -y python3
+
+
+RUN pip3 install FLASK==2.0.3 \
+            	 redis==4.1.4 \
+		 hotqueue==0.2.8
+ 		 
+WORKDIR /app/
+
+COPY ./src/* /app/
+COPY ./dataset.csv /app/dataset.csv
+
+ENTRYPOINT ["python3"]
+CMD ["api.py"]

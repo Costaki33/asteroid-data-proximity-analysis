@@ -45,7 +45,7 @@ def _generate_job_key(jid) -> str:
     return 'job.{}'.format(jid)
 
 #This function will create a jod dictionary when the user curls in a new job 
-def _instantiate_job(jid, status='in progress', route, end='not completed'):
+def _instantiate_job(jid, route, status='in progress', end='not completed'):
     """
     This function will create a dictionary entry for each job. And each job will create and return a job dictionary.
     The job dictionary will contain the folowing key-value pairs.
@@ -66,7 +66,7 @@ def _instantiate_job(jid, status='in progress', route, end='not completed'):
 
     return {
         'id': jid,
-        'status': status
+        'status': status,
         'route': route,
         'end': end
     }
@@ -119,7 +119,7 @@ def add_job(route):
     jid = _generate_id()
 
     #The values for status and end are all set to predetermined values, so no error should come up
-    job_dict = _instantiate_job(jid, status, route, end)
+    job_dict = _instantiate_job(jid, route, staus, end)
 
     #This will generate the job key of a job from the jid
     job_key = _generate_job_key(jid)

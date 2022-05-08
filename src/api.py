@@ -126,8 +126,12 @@ def list_ids():
 
             #adding 'id' into the list
             id_list.append(currentdict['id'])
-
-        return jsonify(id_list)
+        
+        #Checking if the returning list infact does have items inside it, else it will return the list
+        if(len(id_list) == 0):
+            return print_errors.list_if_empty('curl -X GET localhost:5036/id')
+        else:
+            return jsonify(id_list)
 
     else:
         return print_errors.error('curl -X GET localhost:5006/id')

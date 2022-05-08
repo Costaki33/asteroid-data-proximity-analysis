@@ -1,8 +1,6 @@
-#
-#
-#This file will contian all the error messages and other items that will be printed to the user
-#
-#
+'''
+This file will contian all the error messages and other items that will be printed to the user
+'''
 
 #This will print the correct curling command to the user
 def error(correct_curl):
@@ -69,6 +67,26 @@ With that comamnd completed, you can redo the following command once again:
                 {current_route}
 
 """
+
+#This function will print an error message, telling the user that the list is empty
+def list_if_empty(current_route):
+    '''
+    This function will print to the user that the list is empty.
+
+    Input:
+       (current_route) (string): It is the current route that is the user currently curled.
+
+    Output: 
+        (string): It will be a string that tells that the list at is empty, to prevent any errors
+        from happening when running the api.
+    '''
+    return f'''
+
+The list that will be returned is vacant, meaning that the current route:
+                 {current_route}
+Is going to return an empty list, and an error might be raised.
+
+    '''
 
 print(error('curl -X GET localhost:5036'))
 print(welcome_message())

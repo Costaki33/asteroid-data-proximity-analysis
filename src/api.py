@@ -232,6 +232,38 @@ def list_phas():
     else:
         return print_errors.error('curl -X GET localhost:5006/pha')
 
+# this route returns a list of all asteroid diameterss
+@app.route("/diameter", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+def list_diameters():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/diameter')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # empty list
+        diameter_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # adding 'diameter' into the list
+            diameter_list.append(currentdict['diameter'])
+
+        # checking if list actually has items in it
+        if(len(diameter_list) == 0):
+            return print_errors.list_if_empty('curl -X GET localhost:5036/diameter')
+        else:
+            return jsonify(diameter_list)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5006/diameter')
+
+
+
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:

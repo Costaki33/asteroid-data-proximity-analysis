@@ -166,13 +166,13 @@ def list_names():
     else:
         return print_errors.error('curl -X GET localhost:5006/name')
 
-# this route returns a list of near earth orbit asteroids
+# this route returns a list of names of near earth orbit asteroids
 @app.route("/neo", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_neos():
 
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
-        return print_errors.db0_is_empty('curl -x GET localhost:5036/name')
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/neo')
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
@@ -198,6 +198,39 @@ def list_neos():
 
     else:
         return print_errors.error('curl -X GET localhost:5006/neo')
+
+# this route returns a list of names of potentially hazardous asteroids
+@app.route("/pha", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+def list_phas():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/pha')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # empty list
+        pha_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # checking if the 'pha' value is a Y
+            if currentdict['pha'] is 'Y':
+
+                # append the name of the asteroid that is pha
+                pha_list.append(currentdict['name'])
+
+        # checking if list is populated
+        if(len(pha_list) == 0):
+            return '\n\nThere are no potentially hazardous asteroids. Yay!\n\n'
+        else:
+            return jsonify(pha_list)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5006/pha')
 
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])

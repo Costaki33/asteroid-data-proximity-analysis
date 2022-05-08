@@ -166,8 +166,38 @@ def list_names():
     else:
         return print_errors.error('curl -X GET localhost:5006/name')
 
+# this route returns a list of near earth orbit asteroids
+@app.route("/neo", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+def list_neos():
 
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/name')
 
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # empty list
+        neo_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # chacking if the 'neo' value is a Y
+            if currentdict['neo'] is 'Y':
+
+                # append the name of the asteroid that is neo
+                neo_list.append(currentdict['name'])
+
+        # checking if list is populated
+        if(len(neo_list) == 0):
+            return '\n\nThere are no asteroids near Earth orbit. Yay!\n\n'
+        else:
+            return jsonify(neo_list)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5006/neo')
 
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])

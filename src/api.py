@@ -98,6 +98,34 @@ def read_data():
     else:
         return print_errors.error('curl -X GET localhost:5036/data')
 
+# this route returns a list of all asteroid ids
+@app.route("/id", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+def list_ids():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/data/read')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+        
+        # empty list
+        id_list = []
+
+        # going through entire dataset to find ids
+        for i in range(len(jobs.rd.keys())):
+            currentdict = data[i]
+
+            # populating list of ids
+            if 'id' in currentdict.keys():
+                id_list.append(currentdict['id']
+
+        return jsonify(id_list)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5006/data')
+
+
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:
@@ -118,8 +146,6 @@ def rest_db_data() -> str:
         return print_errors.error('curl -X DELETE localhost:5036/data/reset')
 
 #Returns the data to the user, we start using the worker.py function through the usage of jobs.py 
-#@app.route("/data/read", methods = ['GET', 'POST', 'DELETE', 'PUT'])
-#def read_dataset() -> List:    
     
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

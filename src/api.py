@@ -96,15 +96,23 @@ def read_data():
         #Return a list that will be accepted by flask
         return jsonify(list_of_data)
     else:
-        return print_errors.error('curl -X GET localhost:5036/data')
+        return print_errors.error('curl -X GET localhost:5036/data/read')
 
 # this route returns a list of all asteroid ids
 @app.route("/id", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
 def list_ids():
+    """
+    This function will return a list that contains all the id's in the database.
 
+    Input:
+        (None)
+
+    Output: 
+        (list) that contains all the ids of the asteroid.
+    """
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
-        return print_errors.db0_is_empty('curl -x GET localhost:5036/data/read')
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/id')
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
@@ -113,17 +121,16 @@ def list_ids():
         id_list = []
 
         # going through entire dataset to find ids
-        for i in range(len(jobs.rd.keys())):
-            currentdict = data[i]
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
 
-            # populating list of ids
-            if 'id' in currentdict.keys():
-                id_list.append(currentdict['id']
+            #adding 'id' into the list
+            id_list.append(currentdict['id'])
 
         return jsonify(id_list)
 
     else:
-        return print_errors.error('curl -X GET localhost:5006/data')
+        return print_errors.error('curl -X GET localhost:5006/id')
 
 
 #Deletes all of the data in db=0 

@@ -58,7 +58,7 @@ def load_asteroid_data_into_redis() -> str:
             for row in dataset:
                 data['asteroid_data'].append(dict(row))
                 count = count + 1
-                if(count == 3000):
+                if(count == 300):
                     break
 
             #Populating the redis db=0
@@ -68,6 +68,35 @@ def load_asteroid_data_into_redis() -> str:
         return '\n\nThe data has been successfully been stored in redis, in db=0\n\n'
     else:
         return print_errors.error('curl -X POST localhost:5036/data')
+
+
+#This route will return a list of all the items in redis db=0
+@app.route("/data/read", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+def read_data():
+    '''
+    This function will return a list of all the dictonaries that were added to the redis db=0
+
+    Input:
+        (None)
+
+    Output:
+        (list of dicts) that contain all the information that was added to redis
+    '''
+    #We need to check that the db=0 is infact been populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/data/read')
+
+    #Checking that the verb is a GET
+    if(request.method == 'GET'):
+        list_of_data = []
+        
+        for item in jobs.rd.keys():
+            list_of_data.append(json.loads(jobs.rd.get(item)))
+
+        #Return a list that will be accepted by flask
+        return jsonify(list_of_data)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/data')
 
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])

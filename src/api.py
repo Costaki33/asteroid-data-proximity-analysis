@@ -262,6 +262,36 @@ def list_diameters():
     else:
         return print_errors.error('curl -X GET localhost:5006/diameter')
 
+# this route returns a list of all asteroid moid_lds
+@app.route("/moid_ld", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def list_moid_lds():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/moid_ld')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # empty list
+        moid_ld_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # adding 'moid_ld' to the list
+            moid_ld_list.append(currentdict['moid_ld'])
+
+        # checking if list actually has items in it
+        if(len(moid_ld_list) == 0):
+            return print_errors.list_if_empty('curl -X GET localhost:5036/moid_ld')
+        else:
+            return jsonify(moid_ld_list)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5006/moid_ld')
+
 
 
 #Deletes all of the data in db=0 

@@ -330,6 +330,8 @@ def list_neos():
     else:
         return print_errors.error('curl -X GET localhost:5006/neo')
 
+
+
 # this route returns a list of names of potentially hazardous asteroids
 @app.route("/pha", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_phas():
@@ -362,37 +364,41 @@ def list_phas():
 
     else:
         return print_errors.error('curl -X GET localhost:5006/pha')
+'''
 
 # this route returns a list of all asteroid diameterss
-@app.route("/diameter", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+@app.route("/job/diameters", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_diameters():
+    """
+    This function is just going to get the job_id in order for the worker to do the work
+
+    Input:
+        (none)
+
+    Output:
+        (none)
+    """
 
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
-        return print_errors.db0_is_empty('curl -x GET localhost:5036/diameter')
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/diameters')
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
 
-        # empty list
-        diameter_list = []
+        job_dict = jobs.add_job('/job/diameters', 'list')
+        jid = job_dict['id']
 
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
+        #We are going to add the job_id into a new redis database, and the route as the key value
+        jobs.job_list.set('/job/diameters', jid)
 
-            # adding 'diameter' into the list
-            diameter_list.append(currentdict['diameter'])
-
-        # checking if list actually has items in it
-        if(len(diameter_list) == 0):
-            return print_errors.list_if_empty('curl -X GET localhost:5036/diameter')
-        else:
-            return jsonify(diameter_list)
+        #Returns a confirmation string back to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/jod/diameters', jid)
 
     else:
         return print_errors.error('curl -X GET localhost:5006/diameter')
 
+'''
 # this route returns the name and value of the asteroid with the largest diameter
 @app.route("/diameter/max", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def diameter_largest():
@@ -448,7 +454,7 @@ def list_moid_lds():
         return print_errors.error('curl -X GET localhost:5006/moid_ld')
 
 
-
+'''
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:
@@ -469,7 +475,7 @@ def rest_db_data() -> str:
         return print_errors.error('curl -X DELETE localhost:5036/data/reset')
 
 #Returns the data to the user, we start using the worker.py function through the usage of jobs.py 
-'''
+
     
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

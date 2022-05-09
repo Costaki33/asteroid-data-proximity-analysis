@@ -51,7 +51,32 @@ def list_ids(jid):
         
     #adding the return to the answers db
     jobs.answers.set(jid, json.dumps(id_list))
-    
+
+
+#THis function will return a list of all the names that are in the dataset
+def list_names(jid):
+    """
+    This function will return a list of all the names in the dataset
+
+    Input:
+        jid (string): It is the job id that was created
+
+    Output:
+        (none)
+    """
+    name_list = []
+
+    logging.warning('going before the for loop')
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+
+        #adding 'name' into the list
+        name_list.append(currentdict['name'])
+
+    #adding the return to the answers db
+    jobs.answers.set(jid, json.dumps(name_list))
+
+
 
 @jobs.q.worker
 def execute_job(jid):
@@ -75,6 +100,9 @@ def execute_job(jid):
     elif(route == '/job/ids'):
         logging.warning('inside the /job/ids if statement')
         list_ids(jid)
+    elif(route == '/job/names'):
+        logging.warning("inside the /job/names if statement")
+        list_names(jid)
         
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

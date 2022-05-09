@@ -51,7 +51,7 @@ def _generate_job_key(jid) -> str:
     return 'job.{}'.format(jid)
 
 #This function will create a jod dictionary when the user curls in a new job 
-def _instantiate_job(jid, route, status='in progress', end='not completed'):
+def _instantiate_job(jid, route, return_type, status='in progress', end='not completed'):
     """
     This function will create a dictionary entry for each job. And each job will create and return a job dictionary.
     The job dictionary will contain the folowing key-value pairs.
@@ -65,6 +65,11 @@ def _instantiate_job(jid, route, status='in progress', end='not completed'):
          status (str): It will have the following status (in progress or complete)
          route (str): It will have the route as a string
          end (str): It will decide if the job has been completed or not
+         return_type (str): It will decide what will be the return type from the job
+                            The following are the only possible options:
+                            1.- list of dicts
+                            2.- list
+                            3.- graph
 
     Output:
         (dict) it will return the dictionary of the job that was curled by the user
@@ -74,7 +79,8 @@ def _instantiate_job(jid, route, status='in progress', end='not completed'):
         'id': jid,
         'status': status,
         'route': route,
-        'end': end
+        'end': end,
+        'return_type' : return_type
     }
 
 
@@ -110,12 +116,13 @@ def _queue_job(jid):
 
 
 #This function will combine different functions together. This function will be used in the api.py file
-def add_job(route):
+def add_job(route, return_type):
     '''
     This function will combine different functions togther, and this function will be called in the api.py file
 
     Input:
        route (str): It is the route that the user inputted, from the api
+       return_type (str): It is the return type that will be returned when this job gets called again
 
     Output:
        job_dict: it retruns the job dictionary
@@ -125,7 +132,7 @@ def add_job(route):
     jid = _generate_jid()
 
     #The values for status and end are all set to predetermined values, so no error should come up
-    job_dict = _instantiate_job(jid, route)
+    job_dict = _instantiate_job(jid, route, return_type)
 
     #This will generate the job key of a job from the jid
     job_key = _generate_job_key(jid)
@@ -180,3 +187,24 @@ def update_job_status(jid, status='complete'):
         raise Exception("That job dictionary is not found in redis database")
 
     
+#This will change the value for return type of the job dictionary, from none to the correct return value
+def update_return_value(jid, return_type):
+    """
+    This function will change the return type of the job dictionary and apply those changes into redis db=2
+
+    Input:
+        jid (str): It is the jid that was generated
+        return_type (str): It will be the return type that the job will have
+    
+    Output:
+       (none): it will return nothing
+    """
+
+    #The function will return the job dictionary
+    job = get_job_by_id(jid)
+
+    if job:
+        job['return_type'] = return_type
+
+    else:
+        raise Exception("That job dictionary is not found in the redis database")

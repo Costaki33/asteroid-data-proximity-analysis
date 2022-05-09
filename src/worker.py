@@ -24,7 +24,6 @@ def read_data(jid):
         list_of_data.append(json.loads(jobs.rd.get(item)))
 
     #Add this item into the answers db=3. the key value will be jid and the value will be the return
-    
     jobs.answers.set(jid, json.dumps(list_of_data))
     
 
@@ -41,8 +40,6 @@ def list_ids(jid):
     """
     id_list = ["blah"]
     
-    logging.warning('Before going into the for loop')
-    #going through entire dataset to find ids
     for item in jobs.rd.keys():
         currentdict = json.loads(jobs.rd.get(item))
         
@@ -53,7 +50,7 @@ def list_ids(jid):
     jobs.answers.set(jid, json.dumps(id_list))
 
 
-#THis function will return a list of all the names that are in the dataset
+#This function will return a list of all the names that are in the dataset
 def list_names(jid):
     """
     This function will return a list of all the names in the dataset
@@ -66,7 +63,6 @@ def list_names(jid):
     """
     name_list = []
 
-    logging.warning('going before the for loop')
     for item in jobs.rd.keys():
         currentdict = json.loads(jobs.rd.get(item))
 
@@ -75,6 +71,29 @@ def list_names(jid):
 
     #adding the return to the answers db
     jobs.answers.set(jid, json.dumps(name_list))
+
+
+#This function will store list of all the diameter for the asteroids
+def list_diameters(jid):
+    """
+    This function will store a list of all the diamters in the dataset
+
+    Input:
+       jid (str) it is the job id
+
+    Output:
+       None
+    """
+    
+    diameter_list = []
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+        
+        #adding 'diameter' into the list
+        diameter_list.append(currentdict['diameter'])
+
+    #adding the return to the answers db
+    jobs.answers.set(jid, json.dumps(diameter_list))
 
 
 
@@ -95,15 +114,14 @@ def execute_job(jid):
 
     #depending on the route, it will call different functions that will return different results
     if(route == '/job/data/read'):
-        logging.warning('inside the /job/data/read if statement')
         read_data(jid)
     elif(route == '/job/ids'):
-        logging.warning('inside the /job/ids if statement')
         list_ids(jid)
     elif(route == '/job/names'):
-        logging.warning("inside the /job/names if statement")
         list_names(jid)
-        
+    elif(route == '/job/diameters'):
+        list_diameters(jid)
+           
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)
 

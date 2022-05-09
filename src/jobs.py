@@ -17,6 +17,12 @@ q = HotQueue('queue', host=redis_ip, port='6379', db=1)
 #Global variable that will store all the id values generated when a command is curled
 jdb = redis.Redis(host=redis_ip, port='6379', db=2, decode_responses=True)
 
+#Global variable will contain all the returned values to the user after the worker has done the 'work'
+answers = redis.Redis(host=redis_ip, port='6379', db=3, decode_responses=True)
+
+#Global variable that will show all the job ids that were created from when a job is requested
+job_list = redis.Redis(host=redis_ip, port='6379', db=4, decode_responses=True)
+
 #This function will generate a random jid that will be generated when a job was requested on the flask
 def _generate_jid() -> str:
     """
@@ -84,7 +90,7 @@ def _save_job(job_key, job_dict):
     Output:
         (none): It returns nothing, it just adds the job_key and job_dict into the redis database.
     '''
-    jbd.hset(job_key, mapping=job_dict)
+    jdb.hset(job_key, mapping=job_dict)
 
 
 #This function will add the jid into the HotQueue
@@ -112,14 +118,14 @@ def add_job(route):
        route (str): It is the route that the user inputted, from the api
 
     Output:
-       (none) it just calls different functions together in order to make everything easier.
+       job_dict: it retruns the job dictionary
     '''
 
     #I think everytime this function gets called, it will generate random id's and they will all be different
-    jid = _generate_id()
+    jid = _generate_jid()
 
     #The values for status and end are all set to predetermined values, so no error should come up
-    job_dict = _instantiate_job(jid, route, staus, end)
+    job_dict = _instantiate_job(jid, route)
 
     #This will generate the job key of a job from the jid
     job_key = _generate_job_key(jid)
@@ -129,6 +135,8 @@ def add_job(route):
 
     #This will add the jid into the redis queue in db=1
     _queue_job(jid)
+
+    return job_dict
 
 
 #This function will return the job dictionary given a jid
@@ -143,7 +151,7 @@ def get_job_by_id(jid):
         job_dict (dict): It is the job_dict that was created. This will be pulled from the redis database.
     """
 
-    job_dict = jbd.hgetall(_generate_job_key(jid).encode('utf-8'))
+    job_dict = jdb.hgetall(_generate_job_key(jid).encode('utf-8'))
     return job_dict
 
 
@@ -166,6 +174,7 @@ def update_job_status(jid, status='complete'):
     if job:
         job['status'] = status
         _save_job(_generate_job_key(jid), job)
+        job['end'] = status
 
     else:
         raise Exception("That job dictionary is not found in redis database")

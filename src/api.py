@@ -7,6 +7,8 @@ import jobs
 import print_errors
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
+
 #Creating app, an instance of the flask variable
 app = Flask(__name__)
 
@@ -71,7 +73,7 @@ def load_asteroid_data_into_redis() -> str:
 
 
 #This route will return a list of all the items in redis db=0
-@app.route("/data/read", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+@app.route("/job/data/read", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
 def read_data():
     '''
     This function will return a list of all the dictonaries that were added to the redis db=0
@@ -88,16 +90,103 @@ def read_data():
 
     #Checking that the verb is a GET
     if(request.method == 'GET'):
-        list_of_data = []
+        job_dict = jobs.add_job('/job/data/read')
+        jid = job_dict['id']
+
+        #we are going to add the job_id into a new redis database, and the route as the key value
+        jobs.job_list.set('/job/data/read', jid)
+
+        #Returns a message to the user explaning the next steps that need to be done
+        return print_errors.job_confi('curl -X GET localhost:5036/job/data/read', jid)
+
+        #list_of_data = []
         
-        for item in jobs.rd.keys():
-            list_of_data.append(json.loads(jobs.rd.get(item)))
+        #for item in jobs.rd.keys():
+         #   list_of_data.append(json.loads(jobs.rd.get(item)))
 
         #Return a list that will be accepted by flask
-        return jsonify(list_of_data)
+        #return jsonify(list_of_data)
     else:
         return print_errors.error('curl -X GET localhost:5036/data/read')
 
+
+#This function will return a list of all the job id
+@app.route("/job/ids", methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+def return_all_ids():
+    """
+    This function will return a list of all the keys and values that are in the redis
+    database, db=4
+
+    Input:
+        (none)
+
+    Output:
+        (list) return a list of all the key and values that have been stored in db=4
+    """
+    #Checking that db=4 is not empty
+    if(len(jobs.job_list.keys()) == 0):
+        return print_errors.db4_is_empty()
+
+    if(request.method == 'GET'):
+        list_of_id = []
+        for item in jobs.job_list.keys():
+            mini_list = []
+            mini_list.append(item)
+            mini_list.append(jobs.job_list.get(item))
+            list_of_id.append(mini_list)
+
+        return jsonify(list_of_id)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/ids')
+
+#This route will return what is stored in the the answer database or it will return a print statemet
+@app.route("/job/result/<jid>", methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+def get_results(jid):
+    """
+    This function is going to return the result of the job id that was created
+
+    Input:
+        jid (str): It is the job id that created when the user instantiated the job
+
+    Output:
+       It will return the result back to the user.
+    """
+    #Checking if db=3 is empty
+    if(len(jobs.answers.keys()) == 0):
+        return print_errors.db3_is_empty()
+
+    #Getting the result back to the user
+    if(request.method == 'GET'):
+        list_of_dict = json.loads(jobs.answers.get(jid))
+        json.dumps(list_of_dict, sort_keys=False, indent=2)
+#        logging.warning('the type of list_of_dict is:', type(list_of_dict))
+        return jsonify(list_of_dict)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/id')
+
+
+#This route will get rid of all the items in the job_list db=4
+@app.route('/joblist/delete', methods =['DELETE', 'GET', 'PUT', 'PATCH', 'POST'])
+def delete_all_ids():
+    """
+    This function will delete all the pending job in the job list
+
+    Input:
+       (None)
+
+    Output:
+       (string): It will tell the user of that the db=4 is empty
+
+    """
+
+    if(request.method == 'DELETE'):
+        jobs.job_list.flushdb()
+        return print_errors.db4_is_empty()
+    else:
+        return print_errors.error('curl -X DELETE localhost:5036/joblist/delete')
+
+'''
 # this route returns a list of all asteroid ids
 @app.route("/id", methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
 def list_ids():
@@ -321,7 +410,7 @@ def list_moid_lds():
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:
-    '''
+    """
     This function will delete all the data in the redis database (db=0).
 
     Input:
@@ -330,7 +419,7 @@ def rest_db_data() -> str:
     Output:
         (String) it will return a message to the user that the data inside the 
         redis db has been deleted
-    '''
+    """
     if(request.method=="DELETE"):
         jobs.rd.flushdb()
         return '\n\nThe redis container for db=0, is empty, all the data that was inside has been deleted.\n\n'
@@ -338,6 +427,7 @@ def rest_db_data() -> str:
         return print_errors.error('curl -X DELETE localhost:5036/data/reset')
 
 #Returns the data to the user, we start using the worker.py function through the usage of jobs.py 
+'''
     
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

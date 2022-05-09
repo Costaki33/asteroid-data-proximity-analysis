@@ -422,8 +422,31 @@ def diameter_largest():
 
         # using max() to get the largest diameter value
         return('\n\n' + 'The largest asteroid diameter is ' +  str(max(diameter_list)) + '\n\n')
-'''
 
+# this route returns the name and value of the asteroid with the smallest diameter
+@app.route("/diameter/min", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def diameter_largest():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/diameter/min')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # diameter list
+        diameter_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # adding diameters to diameter_list
+            diameter_list.append(float(currentdict['diameter']))
+
+        # using max() to get the smallest diameter value
+        return('\n\n' + 'The smallest asteroid diameter is ' +  str(min(diameter_list)) + '\n\n')
+'''
 # this route returns a list of all asteroid moid_lds
 @app.route("/job/moid_ld", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def list_moid_lds():
@@ -442,8 +465,26 @@ def list_moid_lds():
         return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld')
+'''
+# this route returns the list of moid_lds in ascending order (least to greatest)
+@app.route("/job/moid_ld/ascending", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def ascending_moid_lds():
 
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/moid_ld/ascending')
 
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+        job_dict = jobs.add_job('/job/moid_ld/ascending', 'list')
+        jid = job_dict['id']
+
+        jobs.job_list.set('/job/moid_ld/ascending', jid)
+
+        return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld/ascending', jid)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/moid_ld/ascending')
+'''
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:

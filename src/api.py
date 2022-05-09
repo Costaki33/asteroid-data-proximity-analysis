@@ -273,37 +273,30 @@ def list_ids():
         return print_errors.error('curl -X GET localhost:5006/id')
 
 
-'''
+
 # this route returns a list of all asteroid names
-@app.route("/name", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+@app.route("/job/names", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_names():
 
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
-        return print_errors.db0_is_empty('curl -x GET localhost:5036/name')
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/names')
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
+        #adds it to the queue, jdb
+        job_dict = jobs.add_job('/job/names', 'list')
+        jid = job_dict['id']
 
-        # empty list
-        name_list = []
+        #adds it to the job list
+        jobs.job_list.set('/job/names', jid)
 
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
-
-            # adding 'name' into the list
-            name_list.append(currentdict['name'])
-
-        # checking if list actually has items in it
-        if(len(name_list) == 0):
-            return print_errors.list_if_empty('curl -X GET localhost:5036/name')
-        else:
-            return jsonify(name_list)
-
+        #This prints a confirmation string to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/names', jid)
     else:
         return print_errors.error('curl -X GET localhost:5006/name')
 
+'''
 # this route returns a list of names of near earth orbit asteroids
 @app.route("/neo", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_neos():

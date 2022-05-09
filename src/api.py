@@ -262,6 +262,30 @@ def list_diameters():
     else:
         return print_errors.error('curl -X GET localhost:5006/diameter')
 
+# this route returns the name and value of the asteroid with the largest diameter
+@app.route("/diameter/max", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def diameter_largest():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/diameter')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+
+        # diameter list
+        diameter_list = []
+
+        # going through entire dataset
+        for item in jobs.rd.keys():
+            currentdict = json.loads(jobs.rd.get(item))
+
+            # adding diameters to diameter_list
+            diameter_list.append(float(currentdict['diameter']))
+
+        # using max() to get the largest diameter value
+        return('\n\n' + 'The largest asteroid diameter is ' +  str(max(diameter_list)) + '\n\n')
+
 # this route returns a list of all asteroid moid_lds
 @app.route("/moid_ld", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def list_moid_lds():

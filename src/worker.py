@@ -96,6 +96,28 @@ def list_diameters(jid):
     jobs.answers.set(jid, json.dumps(diameter_list))
 
 
+#This function will do the work
+def list_moid_lds(jid):
+    """
+    This function will do the work
+
+    Input:
+       jid (str): It is the job id
+
+    Output:
+       (none)
+    """
+
+    moid_ld_l = []
+
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+        
+        #adding 'moid_ld' into the list
+        moid_ld_l.append(currentdict['moid_ld'])
+
+    #adding the return to the answers db
+    jobs.answers.set(jid, json.dumps(moid_ld_l))
 
 @jobs.q.worker
 def execute_job(jid):
@@ -121,7 +143,9 @@ def execute_job(jid):
         list_names(jid)
     elif(route == '/job/diameters'):
         list_diameters(jid)
-           
+    elif(route == '/job/moid_ld'):
+        list_moid_lds(jid)
+
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)
 

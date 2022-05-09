@@ -18,7 +18,7 @@ def error(correct_curl):
     return f'\n\n[Error]: Invalid curl for this route. Here is the correct command for this route.\n     {correct_curl}\nRetype the command above to get the correct results.\n\n'
 
 
-#This function will print the welcome message to the user    
+#This function will print the welcome message to the user
 def welcome_message():
     '''
     This function will print the welcome message to the user, that contains all the routes that this api supports.
@@ -38,12 +38,15 @@ Instructions on how to use this application, to store and delete data:
 
 /                GET     Shows all the routes that the user is able to call
 /data            POST    Uploads data into database
-/data/read       GET     Returns a list of all the items that were put in the database
 /data/reset      DELETE  Resets the db that stores the data of the database
 
+Instructions on how to get the API to return things back to the user
+
+/data/read       GET     Returns a list of all the items that were put in the database
 
 '''
     
+
 #This function will print an error message telling the user that db=0 is empty
 def db0_is_empty(current_route):
     """
@@ -68,6 +71,7 @@ With that comamnd completed, you can redo the following command once again:
 
 """
 
+
 #This function will print an error message, telling the user that the list is empty
 def list_if_empty(current_route):
     '''
@@ -76,7 +80,7 @@ def list_if_empty(current_route):
     Input:
        (current_route) (string): It is the current route that is the user currently curled.
 
-    Output: 
+    Output:
         (string): It will be a string that tells that the list at is empty, to prevent any errors
         from happening when running the api.
     '''
@@ -86,8 +90,93 @@ The list that will be returned is vacant, meaning that the current route:
                  {current_route}
 Is going to return an empty list, and an error might be raised.
 
-    '''
+'''
 
-print(error('curl -X GET localhost:5036'))
-print(welcome_message())
-print(db0_is_empty('curl -X POST localhost:5036/data'))
+
+def job_confi(correct_curl, jid):
+    '''
+    This function will return a string to te user telling them that the job has been added to the
+    the queue, and that it will be worked on in the background.
+
+    Input:
+        correct_curl (str): That is the curl command inputted by the user
+        jid (str): It is the job id that was randomly generated.
+
+    Output:
+        (string): IT will return a confirmation message to the user, letting them know that
+        the job was been put in the queue.
+
+    '''
+    return f'''
+
+The job has been succesfully been added to the queue for the folling curl:
+                                {correct_curl}
+The job id for the following job is:
+                                {jid}
+The jid will be very inportant, in order to get the result of your curl commadn dont lose it.
+If you seem to forget the job id then to the command below to show all the saved job ids
+                                curl -X GET localhost:5036/job/ids
+
+'''
+
+
+#This function will return a message to the user telling the user that db=4 is empty
+def db4_is_empty():
+    """
+    This function will tell the user that the db=4 is empty, meaning that no job has been
+    instantiated
+
+    Input:
+        (none)
+
+    Output:
+        (string): Telling the user that the db=4 is empty, that a job needs to be instantiated.
+    """
+
+    return f"""
+
+The database that contains all the job ids is empty, there must be a job instantiated
+in order to user this route. Try this route again when a job has been instantiated.
+
+"""
+
+
+#This function will tell the user that db=3  is empty
+def db3_is_empty():
+    """
+    This function will tell the user that db=3 is empty
+
+    Input:
+       (none)
+
+    Output:
+       (string) that tells the user that db=3 is empty.
+    """
+
+    return f'''
+
+The database that contains all the results for the job instantiations is empty. Instantiate a job
+first in order to get a valid answer. Then try the following command once again.
+                      curl -X GET localhost:5036/job/result/<jid>
+
+'''
+
+
+#This function will tell the user that db=4 is empty, so there is no pending jobs that have been added
+def db4_is_empty():
+    """
+    This function will tell the user that db=4 is empty
+
+    Input:
+       (None)
+
+    Output:
+        (String) that tells the user that db=4 is empty
+    """
+
+    return f'''
+
+The database that contains all the jobs that have been done by the api is empty. If you want to 
+instantiate some jobs, then call the different routes so they can be added to this database.
+
+'''

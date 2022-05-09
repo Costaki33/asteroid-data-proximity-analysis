@@ -162,6 +162,26 @@ first in order to get a valid answer. Then try the following command once again.
 '''
 
 
+#This function will tell the user that db=3  is empty
+def db3_is_empty2():
+    """
+    This function will tell the user that db=3 is empty
+
+    Input:
+       (none)
+
+    Output:
+       (string) that tells the user that db=3 is empty after it  was successfully deleted
+    """
+
+    return f'''
+
+The database that contains all the results for the job instantiations is now empty, after everythig was deleted. 
+Instantiate a job first in order to get a valid answer. Then try the following command once again.
+                      curl -X GET localhost:5036/job/result/<jid>
+
+'''
+
 #This function will tell the user that db=4 is empty, so there is no pending jobs that have been added
 def db4_is_empty():
     """
@@ -178,5 +198,42 @@ def db4_is_empty():
 
 The database that contains all the jobs that have been done by the api is empty. If you want to 
 instantiate some jobs, then call the different routes so they can be added to this database.
+
+'''
+
+#This function will tell the user that db=2 is empty
+def db2_is_empty():
+    """
+    This function will tell the user that db=2 is now empty
+
+    Input:
+       (none)
+
+    Output:
+       (string): It will be a string telling the user that db=2 is empty
+    """
+
+    return f'''
+
+The database that contained all the job keys and job dictionaries has be emptied out. If you want to 
+instantiate some jobs. then call different routes so they can be added to this database.
+
+'''
+
+def return_not_finished(jid):
+    """
+    This function will tell the user that the return value has not been complete yet.
+
+    Input:
+        jid (string): It is the jid that was created
+
+    Output:
+       (string): It will return a string to the user telling them that they need to wait.
+    """
+    return f'''
+    
+The return value for the curl below has not been complete.
+                   curl -X localhost:5036/job/result/{jid}
+Give the program a few seconds then retry the command from above once again.
 
 '''

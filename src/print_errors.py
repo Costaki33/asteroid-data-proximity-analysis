@@ -115,7 +115,7 @@ The job id for the following job is:
                                 {jid}
 The jid will be very inportant, in order to get the result of your curl commadn dont lose it.
 If you seem to forget the job id then to the command below to show all the saved job ids
-                                curl -X GET localhost:5036/job/ids
+                                curl -X GET localhost:5036/stored/job-ids
 
 '''
 

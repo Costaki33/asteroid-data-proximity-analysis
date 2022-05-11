@@ -173,6 +173,25 @@ def get_results(jid):
             json.dumps(normal, sort_keys=False, indent=2)
             return jsonify(normal)
 
+        #Incase the return type is a string
+        elif(job_dictionary['return_type'] == 'string'):
+            logging.warning('It is inside the string if statement')
+            
+            #Returns the string message to the user
+            return jobs.answers.get(jid)
+            
+        #Incase the return type is a dictionary
+        elif(job_dictionary['return_type'] == 'graph'):
+            pass
+
+        #This would happen if the return_type was different from anything else
+        else:
+            return f'''
+
+The route that was curled below.
+
+'''
+
         logging.warning('It did not go into any of the if statements')
         #Incase the return type is a graph
         #elif(job_dictionary['return_type'] == 'graph'):
@@ -296,9 +315,9 @@ def list_names():
     else:
         return print_errors.error('curl -X GET localhost:5006/name')
 
-'''
+
 # this route returns a list of names of near earth orbit asteroids
-@app.route("/neo", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+@app.route("/job/neo", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_neos():
 
     # checking that db 0 is populated
@@ -307,7 +326,17 @@ def list_neos():
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
+        #Adds it to the queue, jdb, it will determine at the very end it will return a list or a string
+        job_dict = jobs.add_job('/job/neo', 'list')
+        jid = job_dict['id']
 
+        #adds it to the job list
+        jobs.job_list.set('/job/neo', jid)
+
+        #This prints a confirmation string to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/neo', jid)
+
+        '''
         # empty list
         neo_list = []
 
@@ -326,12 +355,13 @@ def list_neos():
             return '\n\nThere are no asteroids near Earth orbit. Yay!\n\n'
         else:
             return jsonify(neo_list)
+        '''
 
     else:
         return print_errors.error('curl -X GET localhost:5006/neo')
 
 
-
+'''
 # this route returns a list of names of potentially hazardous asteroids
 @app.route("/pha", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_phas():

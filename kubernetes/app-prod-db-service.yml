@@ -2,15 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: abdon01-test-service
+  name: abdon01-prod-service
   labels:
     username: abdon01
-    env: test
+    env: prod
 spec:
   type: ClusterIP
   selector:
-    app: abdon01-test-redis
+    app: abdon01-prod-db
   ports:
-  - name: abdon01-test
+  - name: abdon01-prod
     port: 6379
     targetPort: 6379
+

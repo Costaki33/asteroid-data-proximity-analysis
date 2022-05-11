@@ -190,6 +190,32 @@ def list_phas(jid):
             jobs.answers.set(jid, json.dumps(pha_list))
 
 
+#This function will return the largest diameter in the dataset
+def diameter_largest(jid):
+    """
+    This function will print the largest diameter of asteroid for the user
+
+    Input:
+        jid (str): It is the job id that was created
+
+    Output:
+       (none): It will output nothing
+    """
+    
+    #diameter list
+    diameter_list =[]
+
+    #going through entire dataset
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+
+        #adding diameters to diameter_list
+        diameter_list.append(float(currentdict['diameter']))
+
+    return_str = '\n\n' + 'The largest asteroid diameter is: ' + str(max(diameter_list)) + '\n\n'
+    jobs.answers.set(jid, return_str)
+
+
 @jobs.q.worker
 def execute_job(jid):
     '''
@@ -220,6 +246,8 @@ def execute_job(jid):
         list_neos(jid)
     elif(route == '/job/pha'):
         list_phas(jid)
+    elif(route == '/job/diameters/max'):
+        diameter_largest(jid)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

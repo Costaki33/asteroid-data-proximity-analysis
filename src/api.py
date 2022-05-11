@@ -419,10 +419,10 @@ def diameter_largest():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/diameters/max')
 
-'''
+
 # this route returns the name and value of the asteroid with the smallest diameter
-@app.route("/diameter/min", methods =['GET', 'PUT', 'POST', 'DELETE'])
-def diameter_largest():
+@app.route("/job/diameters/min", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def diameter_smallest():
 
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
@@ -430,20 +430,18 @@ def diameter_largest():
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
+        #Adds it to the queue, jdb, it will determine at the very end it will return a string
+        job_dict = jobs.add_job('/job/diameters/min', 'string')
+        jid = job_dict['id']
 
-        # diameter list
-        diameter_list = []
+        #We are going to add the job_id into a new redis database, and the route as the key value
+        jobs.job_list.set('/job/diameters/min', jid)
 
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
-
-            # adding diameters to diameter_list
-            diameter_list.append(float(currentdict['diameter']))
-
-        # using max() to get the smallest diameter value
-        return('\n\n' + 'The smallest asteroid diameter is ' +  str(min(diameter_list)) + '\n\n')
-'''
+        #Returns a confirmation string back to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/diameters/min', jid)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/diameters/max')
+        
 # this route returns a list of all asteroid moid_lds
 @app.route("/job/moid_ld", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def list_moid_lds():

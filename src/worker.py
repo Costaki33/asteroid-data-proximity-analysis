@@ -215,6 +215,30 @@ def diameter_largest(jid):
     return_str = '\n\n' + 'The largest asteroid diameter is: ' + str(max(diameter_list)) + '\n\n'
     jobs.answers.set(jid, return_str)
 
+#This function will return the smallest diameter of the asteroid
+def diameter_smallest(jid):
+    """
+    This function will return a string to hte user telling the user the smallest diamter for asteroid
+
+    Input:
+       (jid) (string) it is the job id that was created 
+
+    Output:
+        (none): Nothing will be outputted 
+    """
+    #diameter list
+    diameter_list = []
+
+    #going through the entire dataset
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+        
+        #adding diameters to diamter_list
+        diameter_list.append(float(currentdict['diameter']))
+    
+    return_str = '\n\n' + 'The smallest asteroid diameter is: ' + str(min(diameter_list)) + "\n\n"
+    jobs.answers.set(jid, return_str)
+
 
 @jobs.q.worker
 def execute_job(jid):
@@ -248,6 +272,8 @@ def execute_job(jid):
         list_phas(jid)
     elif(route == '/job/diameters/max'):
         diameter_largest(jid)
+    elif(route == '/job/diameters/min'):
+        diameter_smallest(jid)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

@@ -2,31 +2,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: abdon01-test-flask-dep
+  name: abdon01-prod-api-dep
   labels:
     username: abdon01
-    env: test
+    env: prod
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: abdon01-test-flask
+      app: abdon01-prod-api
   template:
     metadata:
       labels:
         username: abdon01
-        env: test
-        app: abdon01-test-flask
-    spec:
+        env: prod
+        app: abdon01-prod-api
+   spec:
       containers:
-        - name: flaskapp
+        - name: apidep
           imagePullPolicy: Always
-          image: abdon02/flask-app:homework05
+          image: abdon01/asteroid_api:final
           env:
           - name: FLASK_APP
             value: "app.py"
-          - name: REDIS_IP
-            value: "10.109.122.77"
           ports:
           - name: http
             containerPort: 5000

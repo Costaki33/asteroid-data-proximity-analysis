@@ -240,6 +240,42 @@ def diameter_smallest(jid):
     jobs.answers.set(jid, return_str)
 
 
+#This function will return a list of the moid_lds is ascending order
+def ascending_moid_lds(jid):
+    """
+    This function will return a list of a moid_lds that is in ascending order
+
+    Input:
+       (jid) (string): It is the job id that was created
+
+    Output:
+        None: nothing will be returned, the answer will be stored in a redis variable
+    """
+
+    #empty_list
+    empty= []
+
+    #going through the entire dataset
+    for item in jobs.rd.keys():
+        #Turns the dictionaries form strings to actual python dictionary objects
+        currentdict = json.loads(jobs.rd.get(item))
+    
+        #adding moid_lds into the empty_list, and turning the value from string to floats
+        empty.append(float(currentdict['moid_ld']))
+
+    #We need to sort them from least to greatest
+    sortedlist = sorted(empty)
+    
+    #We need to return each element in the list back to strings, made empty empty again
+    empty = []
+
+    #Turning every item back to string
+    for item in sortedlist:
+        empty.append(str(item))
+
+    #store that list in a redis variable
+    jobs.answers.set(jid, json.dumps(empty))
+
 @jobs.q.worker
 def execute_job(jid):
     '''
@@ -274,6 +310,8 @@ def execute_job(jid):
         diameter_largest(jid)
     elif(route == '/job/diameters/min'):
         diameter_smallest(jid)
+    elif(route == '/job/moid_ld/ascending'):
+        ascending_moid_lds(jid)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

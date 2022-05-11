@@ -180,8 +180,9 @@ def update_job_status(jid, status='complete'):
 
     if job:
         job['status'] = status
-        _save_job(_generate_job_key(jid), job)
         job['end'] = status
+        _save_job(_generate_job_key(jid), job)
+        
 
     else:
         raise Exception("That job dictionary is not found in redis database")
@@ -205,6 +206,7 @@ def update_return_value(jid, return_type):
 
     if job:
         job['return_type'] = return_type
+        _save_job(_generate_job_key(jid), job)
 
     else:
         raise Exception("That job dictionary is not found in the redis database")

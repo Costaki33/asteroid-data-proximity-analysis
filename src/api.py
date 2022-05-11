@@ -460,11 +460,11 @@ def list_moid_lds():
         return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld')
-'''
+
 # this route returns the list of moid_lds in ascending order (least to greatest)
 @app.route("/job/moid_ld/ascending", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def ascending_moid_lds():
-
+    
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
         return print_errors.db0_is_empty('curl -x GET localhost:5036/job/moid_ld/ascending')
@@ -479,7 +479,7 @@ def ascending_moid_lds():
         return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld/ascending', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld/ascending')
-'''
+
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def rest_db_data() -> str:

@@ -336,34 +336,13 @@ def list_neos():
         #This prints a confirmation string to the user
         return print_errors.job_confi('curl -X GET localhost:5036/job/neo', jid)
 
-        '''
-        # empty list
-        neo_list = []
-
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
-
-            # chacking if the 'neo' value is a Y
-            if currentdict['neo'] is 'Y':
-
-                # append the name of the asteroid that is neo
-                neo_list.append(currentdict['name'])
-
-        # checking if list is populated
-        if(len(neo_list) == 0):
-            return '\n\nThere are no asteroids near Earth orbit. Yay!\n\n'
-        else:
-            return jsonify(neo_list)
-        '''
-
     else:
         return print_errors.error('curl -X GET localhost:5006/neo')
 
 
-'''
+
 # this route returns a list of names of potentially hazardous asteroids
-@app.route("/pha", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
+@app.route("/job/pha", methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def list_phas():
 
     # checking that db 0 is populated
@@ -372,29 +351,18 @@ def list_phas():
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
+        #Adds it to the queue, jdb, it will determine at the very end it will return a list or a string
+        job_dict = jobs.add_job('/job/neo', 'list')
+        jid = job_dict['id']
 
-        # empty list
-        pha_list = []
+        #adds it to the job list
+        jobs.job_list.set('/job/pha', jid)
 
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
-
-            # checking if the 'pha' value is a Y
-            if currentdict['pha'] is 'Y':
-
-                # append the name of the asteroid that is pha
-                pha_list.append(currentdict['name'])
-
-        # checking if list is populated
-        if(len(pha_list) == 0):
-            return '\n\nThere are no potentially hazardous asteroids. Yay!\n\n'
-        else:
-            return jsonify(pha_list)
+        #This prints a confirmation string to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/pha', jid)
 
     else:
         return print_errors.error('curl -X GET localhost:5006/pha')
-'''
 
 # this route returns a list of all asteroid diameterss
 @app.route("/job/diameters", methods = ['GET', 'POST', 'DELETE', 'PATCH'])

@@ -312,6 +312,7 @@ def execute_job(jid):
         diameter_smallest(jid)
     elif(route == '/job/moid_ld/ascending'):
         ascending_moid_lds(jid)
+    elif(route == 'job/ids/<spefic>'
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

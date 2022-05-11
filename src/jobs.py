@@ -70,6 +70,8 @@ def _instantiate_job(jid, route, return_type, status='in progress', end='not com
                             1.- list of dicts
                             2.- list
                             3.- graph
+                            4.- string
+                            5.- dictionary
 
     Output:
         (dict) it will return the dictionary of the job that was curled by the user
@@ -81,6 +83,7 @@ def _instantiate_job(jid, route, return_type, status='in progress', end='not com
         'route': route,
         'end': end,
         'return_type' : return_type
+        'query': []
     }
 
 

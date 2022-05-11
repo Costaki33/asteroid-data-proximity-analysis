@@ -187,12 +187,11 @@ def get_results(jid):
 
         #Incase the return type is dictionary
         elif(job_dictionary['return_type'] == 'dictionary'):
-            logging.warning("It is inside the dictionary id statement")
+            logging.warning("It is inside the dictionary if statement")
             #It converts it from a string dictionary to a python dictionary
             returned_dictionary = json.loads(jobs.answers.get(jid))
-            
             #returns the returned_dictionary
-            return returned_dictionary            
+            return jsonify(returned_dictionary)            
 
         #This would happen if the return_type was different from anything else
         else:
@@ -510,8 +509,14 @@ def specific_id_info(specific_id):
     
     #Checking that the user is curling with get
     if(request.method == 'GET'):
-        job_dict = jobs.add_job('/job/ids/<specific_id>', 'dictionary')
+        #This is a list that has all the query
+        user_query = f'{specific_id}'
+
+        #Strating thing
+        job_dict = jobs.add_job('/job/ids/<specific_id>', 'dictionary', user_query)
         jid = job_dict['id']
+
+        
 
         #we are going to add the job_id into a new redis databse, and the route as the key value
         jobs.job_list.set('/job/ids/<specific_id>', jid)

@@ -158,7 +158,7 @@ def get_results(jid):
         if(job_dictionary['status'] != 'complete'):
             return print_errors.return_not_finished(jid)
 
-        #Incase the return type is list of dicts
+        #Incase the return type is list of dictionaries
         if(job_dictionary['return_type'] == 'list of dicts'):
             logging.warning('It is inside the list of dicts')
             list_of_dict = json.loads(jobs.answers.get(jid))
@@ -180,9 +180,18 @@ def get_results(jid):
             #Returns the string message to the user
             return jobs.answers.get(jid)
             
-        #Incase the return type is a dictionary
+        #Incase the return type is a graph
         elif(job_dictionary['return_type'] == 'graph'):
+            logging.warning("It is inside the graph statement")
             pass
+
+        #Incase the return type is dictionary
+        elif(job_dictionary['return_type'] == 'dictionary'):
+            logging.warning("It is inside the dictionary if statement")
+            #It converts it from a string dictionary to a python dictionary
+            returned_dictionary = json.loads(jobs.answers.get(jid))
+            #returns the returned_dictionary
+            return jsonify(returned_dictionary)            
 
         #This would happen if the return_type was different from anything else
         else:
@@ -457,7 +466,7 @@ def list_moid_lds():
 
         jobs.job_list.set('/job/moid_ld', jid)
 
-        return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld', jid)
+        return print_errors.job_confi('curl -X GET localhost:5036/job/moid_ld', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld')
 
@@ -476,9 +485,49 @@ def ascending_moid_lds():
 
         jobs.job_list.set('/job/moid_ld/ascending', jid)
 
-        return print_errors.job_config('curl -X GET localhost:5036/job/moid_ld/ascending', jid)
+        return print_errors.job_confi('curl -X GET localhost:5036/job/moid_ld/ascending', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld/ascending')
+
+
+#This function will return a dictionary that to the user pertaining to an inputted id
+@app.route('/job/ids/<specific_id>', methods=['POST', 'PUT', 'DELETE', 'PATCH', 'GET'])
+def specific_id_info(specific_id):
+    """
+    This function the will start a job instance
+
+    Input:
+        specific_id (string): It is the id that the user is inputting 
+
+    Output:
+       None: Nothing, the only thing that is happening is putting this job into the queue 
+    """
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/ids/<specific_id>')
+    
+    #Checking that the user is curling with get
+    if(request.method == 'GET'):
+        #This is a list that has all the query
+        user_query = f'{specific_id}'
+
+        #Strating thing
+        job_dict = jobs.add_job('/job/ids/<specific_id>', 'dictionary', user_query)
+        jid = job_dict['id']
+
+        
+
+        #we are going to add the job_id into a new redis databse, and the route as the key value
+        jobs.job_list.set('/job/ids/<specific_id>', jid)
+
+        #This will print a confimation string to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/ids/<specific_id>', jid)
+
+    else:
+        #This will print to the user the correct route that needs to be used
+        return print_errors.error('curl -X GET localhost:5006/id/<specific_id>')
+
 
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])

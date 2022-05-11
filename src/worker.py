@@ -276,12 +276,44 @@ def ascending_moid_lds(jid):
     #store that list in a redis variable
     jobs.answers.set(jid, json.dumps(empty))
 
+
+#This function will do the work for gathering the correct dictionary information
+def specific_id_info(jid, query_string):
+    """
+    This function is going to return the correct dictionary to the user when the id was insputted
+
+    Input:
+        (jid) (string): It is a string that represents the job id 
+        (query_string) (string): It is a string of all the parameters that was passed in by the user
+
+    Ouput:
+        (none): It outputs nothing it just stores the answer in a redis variable
+    """
+    logging.warning('You are here now')
+    split_query_parameters = query_string
+
+    #These are all dictionary values, item is a dictionary
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+        logging.warning(str(currentdict['id']))
+        logging.warning(str(split_query_parameters))
+        if(currentdict['id'] == split_query_parameters):
+            logging.warning('you are in the if statement')
+            jobs.answers.set(jid, json.dumps(currentdict))
+            break
+
+    logging.warning('It got nothing')
+
+            
+
 @jobs.q.worker
 def execute_job(jid):
     '''
     This function will be in charge of doing all the work
 
     '''
+    logging.warning('You are here in the execute_job')
+
     #Starting to execute the job
     jobs.update_job_status(jid, 'in progress')
 
@@ -312,6 +344,10 @@ def execute_job(jid):
         diameter_smallest(jid)
     elif(route == '/job/moid_ld/ascending'):
         ascending_moid_lds(jid)
+    elif(route == '/job/ids/<specific_id>'):
+        #query should be a string
+        query = job_dictionary['query']
+        specific_id_info(jid, query)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

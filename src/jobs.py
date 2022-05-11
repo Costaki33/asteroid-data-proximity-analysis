@@ -51,7 +51,7 @@ def _generate_job_key(jid) -> str:
     return 'job.{}'.format(jid)
 
 #This function will create a jod dictionary when the user curls in a new job 
-def _instantiate_job(jid, route, return_type, status='in progress', end='not completed'):
+def _instantiate_job(jid, route, return_type, query='blah', status='in progress', end='not completed'):
     """
     This function will create a dictionary entry for each job. And each job will create and return a job dictionary.
     The job dictionary will contain the folowing key-value pairs.
@@ -70,6 +70,8 @@ def _instantiate_job(jid, route, return_type, status='in progress', end='not com
                             1.- list of dicts
                             2.- list
                             3.- graph
+                            4.- string
+                            5.- dictionary
 
     Output:
         (dict) it will return the dictionary of the job that was curled by the user
@@ -80,7 +82,8 @@ def _instantiate_job(jid, route, return_type, status='in progress', end='not com
         'status': status,
         'route': route,
         'end': end,
-        'return_type' : return_type
+        'return_type' : return_type,
+        'query': query
     }
 
 
@@ -116,13 +119,14 @@ def _queue_job(jid):
 
 
 #This function will combine different functions together. This function will be used in the api.py file
-def add_job(route, return_type):
+def add_job(route, return_type, query_string='blah'):
     '''
     This function will combine different functions togther, and this function will be called in the api.py file
 
     Input:
        route (str): It is the route that the user inputted, from the api
        return_type (str): It is the return type that will be returned when this job gets called again
+       query_string
 
     Output:
        job_dict: it retruns the job dictionary
@@ -132,7 +136,7 @@ def add_job(route, return_type):
     jid = _generate_jid()
 
     #The values for status and end are all set to predetermined values, so no error should come up
-    job_dict = _instantiate_job(jid, route, return_type)
+    job_dict = _instantiate_job(jid, route, return_type, query_string)
 
     #This will generate the job key of a job from the jid
     job_key = _generate_job_key(jid)
@@ -183,6 +187,30 @@ def update_job_status(jid, status='complete'):
         job['end'] = status
         _save_job(_generate_job_key(jid), job)
         
+
+    else:
+        raise Exception("That job dictionary is not found in redis database")
+
+
+#This will populate the list the of the job dictionary
+def update_query_value(jid, string_value):
+    """
+    This function will populate the query list of the job dictionary
+
+    Input:
+        (jid): It is the job id string
+        (string_value): It is a string that contains all the query items
+    
+    Output:
+        (none): It will return nothing.        
+    """
+
+    #the function will return the job dictionary
+    job = get_job_by_id(jid)
+
+    if job:
+        job['query'] = string_value
+        _save_job(_generate_job_key(jid), job)
 
     else:
         raise Exception("That job dictionary is not found in redis database")

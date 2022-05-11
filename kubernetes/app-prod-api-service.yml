@@ -2,15 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: abdon01-test-service-flask
+  name: abdon01-prod-service-api
   labels:
     username: abdon01
-    env: test
+    env: prod
 spec:
   type: ClusterIP
   selector:
-    app: abdon01-test-flask
+    app: abdon01-prod-api
   ports:
-  - name: abdon01-test-flask
+  - name: abdon01-prod-api
     port: 5000
     targetPort: 5000
+

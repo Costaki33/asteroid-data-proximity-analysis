@@ -9,4 +9,4 @@ RUN pip3 install redis==4.1.4 \
 WORKDIR /app/
 COPY ./src/* /app/
 ENTRYPOINT ["python3"]
-CMD ["worker-copy.py"]
+CMD ["worker.py"]

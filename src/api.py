@@ -383,7 +383,7 @@ def list_diameters():
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
-
+        #Adds it to the queue, jdb, it will determine at the very end it iwll return a string or a list
         job_dict = jobs.add_job('/job/diameters', 'list')
         jid = job_dict['id']
 
@@ -391,36 +391,35 @@ def list_diameters():
         jobs.job_list.set('/job/diameters', jid)
 
         #Returns a confirmation string back to the user
-        return print_errors.job_confi('curl -X GET localhost:5036/jod/diameters', jid)
+        return print_errors.job_confi('curl -X GET localhost:5036/job/diameters', jid)
 
     else:
-        return print_errors.error('curl -X GET localhost:5006/diameter')
+        return print_errors.error('curl -X GET localhost:5036/job/diameters')
 
-'''
+
 # this route returns the name and value of the asteroid with the largest diameter
-@app.route("/diameter/max", methods =['GET', 'PUT', 'POST', 'DELETE'])
+@app.route("/job/diameters/max", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def diameter_largest():
 
     # checking that db 0 is populated
     if(len(jobs.rd.keys()) == 0):
-        return print_errors.db0_is_empty('curl -x GET localhost:5036/diameter')
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/diameters/max')
 
     # making sure that user is calling GET
     if(request.method == 'GET'):
+        #Adds it to the queue, jdb, it will determine at the very end it iwll return a string or a list
+        job_dict = jobs.add_job('/job/diameters/max', 'string')
+        jid = job_dict['id']
 
-        # diameter list
-        diameter_list = []
+        #We are going to add the job_id into a new redis database, and the route as the key value
+        jobs.job_list.set('/job/diameters/max', jid)
 
-        # going through entire dataset
-        for item in jobs.rd.keys():
-            currentdict = json.loads(jobs.rd.get(item))
+        #Returns a confirmation string back to the user
+        return print_errors.job_confi('curl -X GET localhost:5036/job/diameters/max', jid)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/diameters/max')
 
-            # adding diameters to diameter_list
-            diameter_list.append(float(currentdict['diameter']))
-
-        # using max() to get the largest diameter value
-        return('\n\n' + 'The largest asteroid diameter is ' +  str(max(diameter_list)) + '\n\n')
-
+'''
 # this route returns the name and value of the asteroid with the smallest diameter
 @app.route("/diameter/min", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def diameter_largest():

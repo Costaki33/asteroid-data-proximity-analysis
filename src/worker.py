@@ -119,6 +119,39 @@ def list_moid_lds(jid):
     #adding the return to the answers db
     jobs.answers.set(jid, json.dumps(moid_ld_l))
 
+
+#Function that will return a list of names of earth orbit asteroids
+def list_neos(jid):
+    """
+    This function returns a list of names of asteroids that are near the earth
+
+    Input:
+        jid (str) it is the job id for that specific job
+
+    Output:
+        nothing, it will store the answer in a redis variable
+    """
+    #empty list
+    neo_list = []
+
+    #going through entire dataset
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+
+        #checking if the 'neo' value is a Y
+        if currentdict['neo'] == 'Y':
+            neo_list.append(currentdict['name'])
+
+
+    #Checking if the list is empty, if it is empty then it is better to not store that in redis
+    #We are going to store a string value instead that will be displayed to the user
+    if len(neo_list) == 0:
+        return_string = '\n\nThere are no asteroids near Earth orbit. Yay!\n\n'
+        jobs.update_return_value(jid, 'string')
+        jobs.answers.set(jid, return_string)
+    else:
+        jobs.answers.set(jid, json.dumps(neo_list))
+
 @jobs.q.worker
 def execute_job(jid):
     '''
@@ -145,6 +178,8 @@ def execute_job(jid):
         list_diameters(jid)
     elif(route == '/job/moid_ld'):
         list_moid_lds(jid)
+    elif(route == '/job/neo'):
+        list_neos(jid)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

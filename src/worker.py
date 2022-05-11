@@ -289,21 +289,17 @@ def specific_id_info(jid, query_string):
     Ouput:
         (none): It outputs nothing it just stores the answer in a redis variable
     """
-    logging.warning('You are here now')
     split_query_parameters = query_string
 
     #These are all dictionary values, item is a dictionary
     for item in jobs.rd.keys():
         currentdict = json.loads(jobs.rd.get(item))
-        logging.warning(str(currentdict['id']))
-        logging.warning(str(split_query_parameters))
+        
         if(currentdict['id'] == split_query_parameters):
-            logging.warning('you are in the if statement')
             jobs.answers.set(jid, json.dumps(currentdict))
             break
 
-    logging.warning('It got nothing')
-
+    
             
 
 @jobs.q.worker

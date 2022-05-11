@@ -149,8 +149,46 @@ def list_neos(jid):
         return_string = '\n\nThere are no asteroids near Earth orbit. Yay!\n\n'
         jobs.update_return_value(jid, 'string')
         jobs.answers.set(jid, return_string)
+    
+    #This will be storing the list in the redis varaible
     else:
         jobs.answers.set(jid, json.dumps(neo_list))
+
+
+#This function will return a list of names of potentially hazardous asteroids
+def list_phas(jid):
+    """
+    This function will return a list of names of potentially hazardous asteroids
+
+    Input:
+        jid (str): It is the job id that was created
+
+    Output:
+        None: It will return nothing, it will just store the answer in a redis variable
+    """
+
+    #empty list
+    pha_list = []
+
+    #going through entire dataset
+    for item in jobs.rd.keys():
+        currentdict = json.loads(jobs.rd.get(item))
+
+        #checking if the 'pha' value is 'Y'
+        if currentdict['pha'] == 'Y':
+            #append the name if hte asteroid that is pha
+            pha_list.append(currentdict['name'])
+
+        #checking if the list is empty, if it is then a string message will be stored instead of an empty list
+        if len(pha_list) == 0:
+            return_string = '\n\nThere are no potentially hazardous asteroids. Yay!\n\n'
+            jobs.update_return_value(jid, 'string')
+            jobs.answers.set(jid, return_string)
+
+        #This will be storing the listin the redis variable
+        else:
+            jobs.answers.set(jid, json.dumps(pha_list))
+
 
 @jobs.q.worker
 def execute_job(jid):
@@ -180,6 +218,8 @@ def execute_job(jid):
         list_moid_lds(jid)
     elif(route == '/job/neo'):
         list_neos(jid)
+    elif(route == '/job/pha'):
+        list_phas(jid)
 
     #There will be a 15 second buffer for the program to the job, during this time worker will the work
     time.sleep(15)

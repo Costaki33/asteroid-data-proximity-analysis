@@ -21,4 +21,4 @@ spec:
           image: costaki33/asteroid-data-wrk:0.1
           env:
           - name: REDIS_IP
-            value: "10.109.228.201"
+            value: "10.110.87.96"

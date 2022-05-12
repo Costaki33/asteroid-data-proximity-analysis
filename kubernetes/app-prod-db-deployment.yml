@@ -16,7 +16,7 @@ spec:
         app: asteroid-db
     spec:
       containers:
-        - name: earthquake-db
+        - name: asteroid-db
           image: redis:6
           ports:
           - name: asteroid

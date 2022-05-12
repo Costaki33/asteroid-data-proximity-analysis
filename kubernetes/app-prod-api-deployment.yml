@@ -21,7 +21,7 @@ spec:
           image: costaki33/asteroid-data-wrk:0.1
           env:
           - name: REDIS_IP
-            value: "10.111.7.178"
+            value: "10.110.87.96"
           ports:
           - name: http
             containerPort: 5000

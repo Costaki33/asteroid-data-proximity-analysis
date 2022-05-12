@@ -3,6 +3,7 @@ import time
 import json
 from flask import Flask, request, jsonify
 import logging
+import matplotlib.pyplot as plt
 
 logging.basicConfig(level=logging.DEBUG)
 #These are all the functions that will do various jobs
@@ -276,6 +277,30 @@ def ascending_moid_lds(jid):
     #store that list in a redis variable
     jobs.answers.set(jid, json.dumps(empty))
 
+# this function will return a histogram of all moid_lds
+def moid_graph(jid):
+
+    # moid list
+    moid_list = []
+
+    #going through the entire dataset
+    for item in jobs.rd.keys():
+        #Turns the dictionaries form strings to actual python dictionary objects
+        currentdict = json.loads(jobs.rd.get(item))
+
+        #adding moid_lds into the empty_list, and turning the value from string to floats
+        empty.append(float(currentdict['moid_ld']))
+
+    # creating histogram from moid_list
+    plt.hist(moid_list, bins = 10)
+    plt.savefig('/moid_graph.png')
+
+    with open('/moid_graph.png', 'rb') as f:
+        img = f.read()
+
+    jobs.answers.hset(jid, 'image', img)
+    jobs.hset(jid, )
+    jobs.answers.set(jid, img)
 
 #This function will do the work for gathering the correct dictionary information
 def specific_id_info(jid, query_string):
@@ -297,10 +322,7 @@ def specific_id_info(jid, query_string):
         
         if(currentdict['id'] == split_query_parameters):
             jobs.answers.set(jid, json.dumps(currentdict))
-            break
-
-    
-            
+            break    
 
 @jobs.q.worker
 def execute_job(jid):
@@ -340,6 +362,8 @@ def execute_job(jid):
         diameter_smallest(jid)
     elif(route == '/job/moid_ld/ascending'):
         ascending_moid_lds(jid)
+    elif(route == '/job/moid_ld/graph'):
+        moid_graph(jid)
     elif(route == '/job/ids/<specific_id>'):
         #query should be a string
         query = job_dictionary['query']

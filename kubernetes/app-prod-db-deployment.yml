@@ -2,29 +2,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: abdon01-prod-deployment
+  name: asteroid-db-deployment
   labels:
-    username: abdon01
-    env: prod
+    app: asteroid-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: abdon01-prod-db
+      app: asteroid-db
   template:
     metadata:
       labels:
-        username: abdon01
-        env: prod
-        app: abdon01-prod-db
+        app: asteroid-db
     spec:
       containers:
-        - name: dbdep
+        - name: earthquake-db
           image: redis:6
-          volumeMounts:
-          - name: abdon01-prod-pvc
-            mountPath: "/data"
+          ports:
+          - name: asteroid
+            containerPort: 6379   
+          volumeMounts:  
+            - name: data
+              mountPath: "/data"
       volumes:
-      - name: abdon01-prod-pvc
+      - name: data
         persistentVolumeClaim:
-          claimName: abdon01-prod-pvc
+          claimName: data

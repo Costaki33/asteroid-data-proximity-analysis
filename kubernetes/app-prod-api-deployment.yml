@@ -2,31 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: abdon01-prod-api-dep
+  name: asteroid-flask-deployment
   labels:
-    username: abdon01
-    env: prod
+    app: asteroid-flask
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: abdon01-prod-api
+      app: asteroid-flask
   template:
     metadata:
       labels:
-        username: abdon01
-        env: prod
-        app: abdon01-prod-api
+        app: asteroid-flask
     spec:
       containers:
-        - name: apidep
+        - name: asteroid-flask
           imagePullPolicy: Always
-          image: costaki33/asteroid-data-api:0.1
+          image: costaki33/asteroid-data-wrk:0.1
           env:
-          - name: FLASK_APP
-            value: "app.py"
           - name: REDIS_IP
-            value: "10.108.245.241"
+            value: "10.111.7.178"
           ports:
           - name: http
             containerPort: 5000

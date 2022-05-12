@@ -2,10 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: abdon01-prod-pvc
+  name: data
   labels:
-    username: abdon01
-    env: prod
+    app: asteroid-redis  
 spec:
   accessModes:
     - ReadWriteOnce

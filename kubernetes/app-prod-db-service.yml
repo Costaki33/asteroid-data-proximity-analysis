@@ -2,15 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: abdon01-prod-service
-  labels:
-    username: abdon01
-    env: prod
+  name: asteroid-db-service
 spec:
   type: ClusterIP
   selector:
-    app: abdon01-prod-db
+    app: asteroid-db
   ports:
-  - name: abdon01-prod
+  - name: asteroid-db
     port: 6379
     targetPort: 6379

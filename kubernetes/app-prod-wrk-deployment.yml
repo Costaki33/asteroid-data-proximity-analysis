@@ -2,28 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: abdon01-prod-wrk-dep
+  name: asteroid-wrk-deployment
   labels:
-    username: abdon01
-    env: prod
+    app: asteroid-data-wrk
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: abdon01-prod-wrk
+      app: asteroid-data-wrk
   template:
     metadata:
       labels:
-        username: abdon01
-        env: prod
-        app: abdon01-prod-wrk
+        app: asteroid-data-wrk
     spec:
       containers:
-        - name: wrkdep
+        - name: asteroid-data-wrk
           imagePullPolicy: Always
           image: costaki33/asteroid-data-wrk:0.1
           env:
-          - name: WORKER_APP
-            value: "worker.py"
           - name: REDIS_IP
-            value: "10.108.245.241"
+            value: "10.109.228.201"

@@ -183,9 +183,11 @@ def get_results(jid):
         #Incase the return type is a graph
         elif(job_dictionary['return_type'] == 'graph'):
             logging.warning("It is inside the graph statement")
-            path = f'/pics/{jid}.png'
+            job_key = jobs._generate_job_key(jid)
+            logging.warning("The value for images is: ", str(jobs.jdb.hget(job_key, 'images')))
+            path = f'/pics/{job_key}.png'
             with open(path, 'wb') as f:
-                f.write(jobs.answers.get(jid, 'image'))
+                f.write(jobs.jdb.hget(job_key, 'image'))
             return send_file(path, mimetype='image/png', as_attachment=True)
 
         #Incase the return type is dictionary

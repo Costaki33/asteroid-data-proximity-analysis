@@ -14,4 +14,3 @@ spec:
   - name: abdon01-prod
     port: 6379
     targetPort: 6379
-

@@ -328,6 +328,16 @@ This will show the route requested and its respective job id. The user can copy 
 [funky@mnky ~]curl -X GET localhost:5031/job/result/<job_id>
 ```
 Refer back to the example above as visual example of the [above](###Help-Message) mentioned commands
-# Files 
+## Files 
 
+### /docker
+- *Dockerfile.api*   
+This is the Dockerfile that builds the image and all dependencies to run the Flask API
+- *Dockerfile.wrk*   
+This is the Dockerfile that builds the image and all dependencies for workers. 
+
+
+
+## Citations
+Hossain, M. S. (2022, May 11). Asteroid dataset. Kaggle. Retrieved May 12, 2022, from https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset?resource=download 
 

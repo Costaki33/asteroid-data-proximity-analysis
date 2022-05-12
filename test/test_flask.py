@@ -1,3 +1,4 @@
+#from app import *
 import pytest, requests as rqs
 import requests
 import json
@@ -16,12 +17,12 @@ host = 'localhost'
 port_num = '5031'
 curl = f'http://{host}:{port_num}'
 
-def test_data_download():
+def test_welcome_message():
 
-    route = f'{curl}/data'
-    result_response = requests.post(route)
-    assert response.ok == True
-    assert response.content == b'''
+    route = f'{curl}/'
+    result_response = requests.get(route)
+    assert result_response.ok == True
+    assert result_response.content == b'''
 
 --- Asteroid Proximity Data Query Program ---
 

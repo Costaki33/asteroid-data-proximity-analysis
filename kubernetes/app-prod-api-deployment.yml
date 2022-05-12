@@ -21,7 +21,7 @@ spec:
       containers:
         - name: apidep
           imagePullPolicy: Always
-          image: abdon01/asteroid_api:final
+          image: costaki33/asteroid-data-api:0.1
           env:
           - name: FLASK_APP
             value: "app.py"

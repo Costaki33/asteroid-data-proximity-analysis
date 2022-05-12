@@ -1,6 +1,25 @@
-# Asteroid Data Proximity Analysis
+# Asteroid Proximity Analysis Data Query System (APADQS)
+### By Constantinos Skevofilax, Stefanie Catalan, and Abdon Verdejo-Parada
+#
+This project was developed to provide users with a proper medium to investigate the different positional and identifiction data of asteroids that are Near-Earth Orbit provided by NASA's data concerning local asteroids. 
+More specifically, identification of these moving bodies is key for NASA researchers, as they can become a potential hazard to Earth, be used by probes for further investigation, and allows general further understanding of asteroids in space. 
+With this program, users can query data that can further advance their research into the field of Near-Earth asteroids in a easy-to-use manner through the APADQS. 
 
-(explain project motivation and what the program is about / why its important)
+
+## Getting Started
+
+The inital setup for being able to use the APADQS, you need to setup the repository. Run the following command: 
+``` bash
+[funky@mnky ~]$ git clone git@github.com:Costaki33/asteroid-data-proximity-analysis.git
+``` 
+You have now successfully pulled the repository that has the setup for you to run the APADQS! 
+
+Now you need to download the dataset the APADQS uses. See the original source at the provided [link](https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset?resource=download) to fruther explore the full dataset.
+As per downloading the dataset, on your local machine, run the following command: 
+``` bash
+[funky@mnky ~]$ wget https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset?resource=download
+```
+The dataset will be downloaded and loaded into your now local repository.
 
 
 ## Deploying to Kubernetes

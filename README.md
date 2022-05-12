@@ -357,10 +357,16 @@ This is the main file for the API, with all the available routes the user can us
 This file contains the worker script, which utilizes functions from jobs.py to preform queued jobs. 
 - *jobs.py*   
 This file contains all job related functions, such as save, update, and so on. These functions are called in ``app.py`` as a part of the various routes called by the user. 
+- *print_errors.py*
+This is the script that outputs different messages based on different conditions met by the user when calling a HTTP curl method. 
 
+### /test
+- *test_flask.py*   
+ This is the pytest script that runs the integration testing funcitons of our system, checking that our system is working properly. 
 
-
-
+### JPG
+- *asteroid_query_system_diagram.jpg*
+JPG image of our diagram of the APADQS and how the system works from the back end.  
 
 ## Citations
 Hossain, M. S. (2022, May 11). Asteroid dataset. Kaggle. Retrieved May 12, 2022, from https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset?resource=download 

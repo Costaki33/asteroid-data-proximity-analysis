@@ -142,6 +142,7 @@ The job id (jid) for the following job is:
 NOTE: The jid is very important. In order to view the results of your curl command, dont lose it.
 
 If you forget the jid, use the following command below to show all the saved job ids:
+
                                 curl -X GET localhost:5031/stored/job-ids
 
 '''
@@ -167,7 +168,10 @@ def db4_is_empty():
 
 [ERROR]: The database that contains all the job ids is empty. There must be a job instantiated
 in order to use this route. Try using this route again when a job has been instantiated.
-Call '/' to find further commands to instantiate your command.
+Run the following command to instantiate your job:
+
+                      curl -X GET localhost:5036/job/result/<jid>
+
 
 '''
 
@@ -184,15 +188,17 @@ def db3_is_empty():
        (none)
 
     Output:
-       (string) that tells the user that db=3 is empty.
+       ERROR message (string): Tells the user that db = 3 is empty. The job needs to be insatantiated
     
     '''
 
     return f'''
 
-The database that contains all the results for the job instantiations is empty. Instantiate a job
-first in order to get a valid answer. Then try the following command once again.
-                      curl -X GET localhost:5036/job/result/<jid>
+[ERROR]: The database that contains all the job ids is empty. There must be a job instantiated
+in order to use this route and have a return value. Try using this route again when a job has been instantiated.
+Run the following command to instantiate your job:
+
+                      curl -X GET localhost:5031/job/result/<jid>
 
 '''
 

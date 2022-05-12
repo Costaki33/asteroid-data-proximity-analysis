@@ -6,8 +6,8 @@ RUN yum update -y && \
 
 RUN pip3 install FLASK==2.0.3 \
             	 redis==4.1.4 \
-		 hotqueue==0.2.8
- 		 
+		 hotqueue==0.2.8 \
+ 		 pytest==7.0.0
 WORKDIR /app/
 
 COPY ./src/* /app/

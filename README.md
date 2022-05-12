@@ -336,6 +336,30 @@ This is the Dockerfile that builds the image and all dependencies to run the Fla
 - *Dockerfile.wrk*   
 This is the Dockerfile that builds the image and all dependencies for workers. 
 
+### /kubernetes 
+- *app-prod-api-deployment.yml*
+This pulls asteroid API container from Dockerhub and deploys it.
+- *app-prod-api-service.yml*
+This provides an IP for the user to curl for their routes.
+- *app-prod-db-deployment.yml*
+This pulls the Redis image from DockerHub and deploys the database.
+- *app-prod-db-pvc.yml*
+This provides a Redis IP so that the deployments can access the dataset's database.
+- *app-prod-db-service.yml*
+This makes a request for storage to the k8's admin for the database.
+- *app-prod-wrk-deployment.yml*
+This pulls worker container from DockerHub and deploys it so that the workers can be working on the queue in the background. 
+
+### /src  
+- *app.py*  
+This is the main file for the API, with all the available routes the user can use. 
+- *worker.py*   
+This file contains the worker script, which utilizes functions from jobs.py to preform queued jobs. 
+- *jobs.py*   
+This file contains all job related functions, such as save, update, and so on. These functions are called in ``app.py`` as a part of the various routes called by the user. 
+
+
+
 
 
 ## Citations

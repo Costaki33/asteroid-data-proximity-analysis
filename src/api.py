@@ -206,11 +206,6 @@ The route that was curled below.
 
 '''
 
-        logging.warning('It did not go into any of the if statements')
-        #Incase the return type is a graph
-        #elif(job_dictionary['return_type'] == 'graph'):
-         #   pass
-            
     else:
         return print_errors.error('curl -X GET localhost:5036/job/id')
 
@@ -494,6 +489,8 @@ def ascending_moid_lds():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld/ascending')
 
+
+'''
 # this route returns a histogram of all moid_lds
 @app.route("/job/moid_ld/graph", methods =['GET', 'PUT', 'POST', 'DELETE'])
 def moid_graph():
@@ -512,6 +509,7 @@ def moid_graph():
         return print_errors.job_confi('curl -X GET localhost:5036/job/moid_ld/graph', jid)
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld/graph')
+'''
 
 #This function will return a dictionary that to the user pertaining to an inputted id
 @app.route('/job/ids/<specific_id>', methods=['POST', 'PUT', 'DELETE', 'PATCH', 'GET'])

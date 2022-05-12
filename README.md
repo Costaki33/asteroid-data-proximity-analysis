@@ -22,14 +22,49 @@ As per downloading the dataset, on your local machine, run the following command
 The dataset will be downloaded and loaded into your now local repository.
 
 
-## Deploying to Kubernetes
+## Deploying to Kubernetes (k8's)
 
-(instructions on how to deploy program to k8s)
+For the program to be able to be access by the outside world, you need to k8's. Using the provided commands, you can set up the environment necessary to interact with the APADQS using HTTP curl methods:
+``` bash
+[funky@mnky ~]$ kubectl apply -f app-prod-db-pvc.yml
+[funky@mnky ~]$ kubectl apply -f app-prod-db-deployment.yml
+[funky@mnky ~]$ kubectl apply -f app-prod-db-service.yml
+[funky@mnky ~]$ kubectl apply -f app-prod-api-service.yml
+```
+After setting up the above, use the following command to get the cluster IP address needed to talk between the k8's nodes in case of a pod failing. 
+``` bash
+[funky@mnky ~]$ kubectl get services 
+```
+Note this IP address, it will be important in the following step.
+
+Run the following command: 
+``` bash
+[funky@mnky ~]$ kubectl apply -f app-prod-api-deployment.yml
+```
+Use a text editor like VIM and edit ``app-prod-api-deployment.yml`` so that the cluster IP address you noted above is now put into the following place: 
+``spec: containers: env: (your_ip)``
 
 
 ### Integration Testing
 
-(how to run integration tests)
+To check that the APADQS is working properly and returning successful return values, we use the integration testing method to test our functions. 
+To make sure everything is working correctly, run the following command: 
+``` bash
+[funky@mnky ~]$ cd /test
+[funky@mnky ~]$ python3 test_flask.py
+```
+If done correctly, the following will output: 
+```bash
+============================================================================================================================= test session starts =============================================================================================================================
+platform linux -- Python 3.6.8, pytest-7.0.0, pluggy-1.0.0
+rootdir: /home/costaki/asteroid-data-proximity-analysis/test
+collected 3 items
+
+test_flask.py ...                                                                                                                                                                                                                                                       [100%]
+
+============================================================================================================================== 3 passed in 2.32s ==============================================================================================================================
+```
+If all 3 tests pass, our system is working properly and now can be utilized to its full potential!
 
 
 ## Interacting with the Program

@@ -114,7 +114,9 @@ If all 3 tests pass, our system is working properly and now can be utilized to i
 
 Now having the APADQS environment properly set up, running, and passed our integration testing measures, you can now use the system!
 
+### Help Message
 To get a feel for the APADQS's capabilities and available commands, run the following command ``curl -X GET localhost:5031/``, it will provide instructions on how to use the different HTTP curl routes the APADQS uses: 
+
 ```bash
 [funky@mnky ~] curl -X GET localhost:5031/
 
@@ -157,7 +159,7 @@ COMMAND:              HTTP METHOD
 
 ```
 
-In order to create new data into the `redis` database that stores your requested value, the command is as follows:
+In order to create new data into the ``redis`` database that stores your requested value, the command is as follows:
 
 ```bash
 [funky@mnky ~]curl -X POST localhost:5031/data

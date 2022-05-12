@@ -21,6 +21,39 @@ As per downloading the dataset, on your local machine, run the following command
 ```
 The dataset will be downloaded and loaded into your now local repository.
 
+### Understanding the Dataset
+ 
+This asteroid dataset describes the following identification information for each asteroid: 
+
+- H: Absolute magnitude parameter
+- a: Semi-major axis au Unit
+- albedo: Geometric albedo 
+- class: Class type of asteroid
+- diameter: Object diameter (from equivalent sphere) km Unit
+- diameter_sigma: 1-sigma uncertainty in object diameter km Unit
+- e: Eccentricity
+- epoch: Epoch of osculation in modified Julian day form
+- equinox: Equinox of reference frame
+- full_name: Full name of the asteroid
+- i: Inclination; angle with respect to x-y ecliptic plane
+- id: Identification number for asteroid
+- moid_id: Earth Minimum Orbit Intersection Distance au Unit
+- n: Mean motion (1-sigma uncertainty) Deg/d
+- name: Object IAU name
+- neo: Near-Earth Object (NEO) flag
+- orbit_id: Orbit solution ID
+- pdes: Object primary designation
+- pha: Potentially Hazardous Asteroid (PHA) flag
+- prefix: Comet designated prefix
+- q: Perihelion distance au Unit
+- sigma_a: Semi-major axis (1-sigma uncertainty) AU
+- sigma_e: Eccentricity (1-sigma uncertainty)
+- sigma_i: Inclination (1-sigma uncertainty) Deg
+- sigma_per: Sidereal orbital period (1-sigma uncertainty) D 
+- sigma_q: Perihelion distance (1-sigma uncertainty) AU
+- sigma_tp: Time of perihelion passage (1-sigma uncertainty) D
+- spkid: Object primary SPK-ID
+- tp: Time of perihelion passage TDB Unit
 
 ## Deploying to Kubernetes (k8's)
 
@@ -33,7 +66,9 @@ For the program to be able to be access by the outside world, you need to k8's. 
 ```
 After setting up the above, use the following command to get the cluster IP address needed to talk between the k8's nodes in case of a pod failing. 
 ``` bash
-[funky@mnky ~]$ kubectl get services 
+[funky@mnky ~]$ kubectl get services
+NAME                                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/abdon01-prod-service         ClusterIP   10.102.115.97    <none>        6379/TCP   27m 
 ```
 Note this IP address, it will be important in the following step.
 
@@ -44,10 +79,18 @@ Run the following command:
 Use a text editor like VIM and edit ``app-prod-api-deployment.yml`` so that the cluster IP address you noted above is now put into the following place: 
 ``spec: containers: env: (your_ip)``
 
+Finally, run the following: 
+```bash
+[funky@mnky ~]$ kubectl apply -f app-prod-wrk-deployment.yml
+```
+Now, everything is set up for you to use the APADQS!
 
-### Integration Testing
 
-To check that the APADQS is working properly and returning successful return values, we use the integration testing method to test our functions. 
+## Integration Testing
+(api, database, worker)
+To check that the APADQS is working properly and returning successful return values, we need to make sure that our API, database, and Worker are all working properly. As such, we utilizd an integration testing method to test the 
+functions in our API, database, and Worker are all working properly and outputting successful results. As such, we utilized pytest to test our different functions in our applications to see if our expected successful return value is equal to what is actually returned. 
+
 To make sure everything is working correctly, run the following command: 
 ``` bash
 [funky@mnky ~]$ cd /test
@@ -116,4 +159,7 @@ This will show the route requested and its respective job id. The user can copy 
 ```ruby
 curl -X GET localhost:5006/job/result/<job_id>
 ```
+
+# Files 
+
 

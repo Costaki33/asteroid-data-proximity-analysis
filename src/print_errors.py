@@ -52,14 +52,32 @@ COMMAND:         HTTP METHOD:
 -------------------------------------------------------------------------------------
 /                GET     [This route shows all the available commands you can utilize]
 /data            POST    [Uploads the data into local database]
-/data/reset      DELETE  [Resets the db container that stores the data that is currently in the database]
+/data/reset      DELETE  [Resets the db variable that stores the data that is currently in the database]
+/joblist/delete  DELETE  [Resets the db variable that stores all the jobs that were curled by the user]
+/jdb/delete      DELETE  [Resets the db variable that stores all the job keys and job dictionaries]
+/answers/delete  DELETE  [Resets the db variable that stores all the return values after the worker has completed the job]
 
--> Further instructions on how to get the API application to return data back to you, the user:
+-> Further instructions on how instantiate jobs to the API
 
-
-COMMAND:         HTTP METHOD:
+COMMAND:               HTTP METHOD:
 -------------------------------------------------------------------------------------
-/data/read       GET     [This route returns a list of all the items that were put into the local database]
+/job/data/read           GET     [This route returns a list of dictionaries to that represent all the asteroids in the dataset]
+/job/ids                 GET     [This route returns a list that contains all the ids in the dataset]
+/job/names               GET     [This route a list that contains all the names of the asteroids in the dataset]
+/job/neo                 GET     [This route returns a list or string that contains all the 'neo' in the dataset]
+/job/pha                 GET     [This route returns a list of string that contains all the 'pha' in the dataset]
+/job/diameters           GET     [This route returns a list of all the diameter measurements in the dataset]
+/job/diameters/max       GET     [This route returns a string that tells the user the largest diameter in the dataset]
+/job/diameters/min       GET     [This route returns a string that tell the user the smalles diameter in the dataset]
+/job/moid_ld             GET     [This route returns a list of all the moid_ld in the dataset]
+/job/moid_ld/ascending   GET     [This route returns a list of all the moid_ld from smallest value to largest]
+/job/ids/<specific_id>   GET     [This route returns a dictionary pertaining to the id that the user inputs]
+
+-> Further instructions on how to get the API application get the result back to the user
+
+COMMAND:              HTTP METHOD
+--------------------------------------------------------------------------------------
+/job/result/<jid>        GET     [This route returns the appropate result back to the user when a job id is inputted]
 
 
 '''

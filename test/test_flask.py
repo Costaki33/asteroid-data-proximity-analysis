@@ -1,5 +1,3 @@
-from api.py import *
-from worker.py import *
 import pytest, requests as rqs
 import requests
 import json
@@ -97,17 +95,10 @@ def test_jobs_cycle():
     '''
 
     route = f'{curl}/job/diameters/max'
-    job_data = {} #unsure what data to put in here besides the actual max value, being 939.4
+    job_data = {} 
     result_response = requests.get(route)
     assert result_response.ok == True
     assert result_response.status_code == 200
-    #assert bool(re.search('To submit a job, do the following', response.text)) == True
-    assert result_response.content == b'\n\n' + 'The largest asteroid diameter is: ' + str(max(diameter_list)) + '\n\n'
-
-
-
-
-
 
 if __name__ == "__main__":
     pytest.main()

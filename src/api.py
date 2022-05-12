@@ -2,7 +2,7 @@ import json
 import csv
 import redis
 from typing import List
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import jobs
 import print_errors
 import logging
@@ -183,7 +183,10 @@ def get_results(jid):
         #Incase the return type is a graph
         elif(job_dictionary['return_type'] == 'graph'):
             logging.warning("It is inside the graph statement")
-            pass
+            path = f'/pics/{jid}.png'
+            with open(path, 'wb') as f:
+                f.write(jobs.answers.get(jid, 'image'))
+            return send_file(path, mimetype='image/png', as_attachment=True)
 
         #Incase the return type is dictionary
         elif(job_dictionary['return_type'] == 'dictionary'):
@@ -489,6 +492,24 @@ def ascending_moid_lds():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/moid_ld/ascending')
 
+# this route returns a histogram of all moid_lds
+@app.route("/job/moid_ld/graph", methods =['GET', 'PUT', 'POST', 'DELETE'])
+def moid_graph():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5036/job/moid_ld/graph')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+        job_dict = jobs.add_job('/job/moid_ld/graph', 'graph')
+        jid = job_dict['id']
+
+        jobs.job_list.set('job/moid_ld/graph', jid)
+
+        return print_errors.job_confi('curl -X GET localhost:5036/job/moid_ld/graph', jid)
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/moid_ld/graph')
 
 #This function will return a dictionary that to the user pertaining to an inputted id
 @app.route('/job/ids/<specific_id>', methods=['POST', 'PUT', 'DELETE', 'PATCH', 'GET'])
@@ -527,7 +548,6 @@ def specific_id_info(specific_id):
     else:
         #This will print to the user the correct route that needs to be used
         return print_errors.error('curl -X GET localhost:5006/id/<specific_id>')
-
 
 #Deletes all of the data in db=0 
 @app.route("/data/reset", methods =['GET', 'PUT', 'POST', 'DELETE'])

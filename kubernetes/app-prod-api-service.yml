@@ -14,4 +14,3 @@ spec:
   - name: abdon01-prod-api
     port: 5000
     targetPort: 5000
-

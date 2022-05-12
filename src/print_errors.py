@@ -1,6 +1,9 @@
 '''
 
+    Print ERROR Script 
+--------------------------------------------------------------------------------------------------
     This file will contian all the error messages and other items that will be printed to the user
+
 
 '''
 
@@ -83,7 +86,9 @@ def db0_is_empty(current_route):
 [ERROR]: The database that stores all of the data in the Redis container is empty.
 Because of this, nothing can be returned to the user until the database has been filled. In order to populate the database,
 use the following command:
+
                 curl -X POST localhost:5031/data
+
 Following that completed & successful command, you can redo the following command:
                 {current_route}
 
@@ -108,7 +113,9 @@ def list_if_empty(current_route):
     return f'''
 
 [ERROR]: The requested list that will be returned is vacant, meaning that the current route:
+
                  {current_route}
+
 Will return an empty list, leading to a possible error being raised.
 
 '''

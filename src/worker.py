@@ -209,7 +209,11 @@ def diameter_largest(jid):
     #going through entire dataset
     for item in jobs.rd.keys():
         currentdict = json.loads(jobs.rd.get(item))
-
+        
+        #Incase it is empty
+        if(currentdict['diameter'] == ''):
+            continue
+        
         #adding diameters to diameter_list
         diameter_list.append(float(currentdict['diameter']))
 
@@ -234,6 +238,10 @@ def diameter_smallest(jid):
     for item in jobs.rd.keys():
         currentdict = json.loads(jobs.rd.get(item))
         
+        #Incase it is empty
+        if(currentdict['diameter'] == ''):
+            continue
+
         #adding diameters to diamter_list
         diameter_list.append(float(currentdict['diameter']))
     
@@ -261,6 +269,10 @@ def ascending_moid_lds(jid):
         #Turns the dictionaries form strings to actual python dictionary objects
         currentdict = json.loads(jobs.rd.get(item))
     
+        #Incase it is empty
+        if(currentdict['diameter'] == ''):
+            continue
+
         #adding moid_lds into the empty_list, and turning the value from string to floats
         empty.append(float(currentdict['moid_ld']))
 
@@ -287,6 +299,10 @@ def moid_graph(jid):
     for item in jobs.rd.keys():
         #Turns the dictionaries form strings to actual python dictionary objects
         currentdict = json.loads(jobs.rd.get(item))
+
+        #Incase it is empty
+        if(currentdict['diameter'] == ''):
+            continue
 
         #adding moid_lds into the empty_list, and turning the value from string to floats
         empty.append(float(currentdict['moid_ld']))

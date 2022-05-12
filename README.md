@@ -87,7 +87,7 @@ Now, everything is set up for you to use the APADQS!
 
 
 ## Integration Testing
-(api, database, worker)
+
 To check that the APADQS is working properly and returning successful return values, we need to make sure that our API, database, and Worker are all working properly. As such, we utilizd an integration testing method to test the 
 functions in our API, database, and Worker are all working properly and outputting successful results. As such, we utilized pytest to test our different functions in our applications to see if our expected successful return value is equal to what is actually returned. 
 
@@ -112,16 +112,62 @@ If all 3 tests pass, our system is working properly and now can be utilized to i
 
 ## Interacting with the Program
 
-(how to interact with program)
-Once the user has access to the software, they now have the ability to query routes for the program to satisfy requests.
+Now having the APADQS environment properly set up, running, and passed our integration testing measures, you can now use the system!
 
-CRUD stuff:
+To get a feel for the APADQS's capabilities and available commands, run the following command ``curl -X GET localhost:5031/``, it will provide instructions on how to use the different HTTP curl routes the APADQS uses: 
+```bash
+[funky@mnky ~] curl -X GET localhost:5031/
 
-In order to create new data into the `redis` database, the command is as follows:
-```ruby
-curl -X POST localhost:5006/data
+--- Asteroid Proximity Data Query Program ---
+
+Welcome to the Asteroid Proximity Data Query System! With this application, you can query different datasets about asteroids that are close to Earth.
+-> Below are instructions on how to store and delete data:
+
+COMMAND:         HTTP METHOD:
+-------------------------------------------------------------------------------------
+/                GET     [This route shows all the available commands you can utilize]
+/data            POST    [Uploads the data into local database]
+/data/reset      DELETE  [Resets the db variable that stores the data that is currently in the database]
+/joblist/delete  DELETE  [Resets the db variable that stores all the jobs that were curled by the user]
+/jdb/delete      DELETE  [Resets the db variable that stores all the job keys and job dictionaries]
+/answers/delete  DELETE  [Resets the db variable that stores all the return values after the worker has completed the job]
+
+-> Further instructions on how instantiate jobs to the API
+
+COMMAND:               HTTP METHOD:
+-------------------------------------------------------------------------------------
+/job/data/read           GET     [This route returns a list of dictionaries to that represent all the asteroids in the dataset]
+/job/ids                 GET     [This route returns a list that contains all the ids in the dataset]
+/job/names               GET     [This route a list that contains all the names of the asteroids in the dataset]
+/job/neo                 GET     [This route returns a list or string that contains all the 'neo' in the dataset]
+/job/pha                 GET     [This route returns a list of string that contains all the 'pha' in the dataset]
+/job/diameters           GET     [This route returns a list of all the diameter measurements in the dataset]
+/job/diameters/max       GET     [This route returns a string that tells the user the largest diameter in the dataset]
+/job/diameters/min       GET     [This route returns a string that tell the user the smalles diameter in the dataset]
+/job/moid_ld             GET     [This route returns a list of all the moid_ld in the dataset]
+/job/moid_ld/ascending   GET     [This route returns a list of all the moid_ld from smallest value to largest]
+/job/ids/<specific_id>   GET     [This route returns a dictionary pertaining to the id that the user inputs]
+
+-> Further instructions on how to get the API application get the result back to the user
+
+COMMAND:              HTTP METHOD
+--------------------------------------------------------------------------------------
+/job/result/<jid>        GET     [This route returns the appropate result back to the user when a job id is inputted]
+
+
 ```
-This will add the dataset to the server, where all of the raw data is stored into database 0. A message will be returned to the user indicating that the data has been adequately stored.
+
+In order to create new data into the `redis` database that stores your requested value, the command is as follows:
+
+```bash
+[funky@mnky ~]curl -X POST localhost:5031/data
+```
+This will add the dataset to the server, where all of the raw data is stored into database 0. A message will be returned to the user indicating that the data has been adequately stored:
+
+```bash
+The data has been successfully been stored in redis, in db=0
+```
+
 
 To read the existing data in the database, perform the command:
 ```ruby

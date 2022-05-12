@@ -205,7 +205,7 @@ Run the following command to instantiate your job:
 
 #This function will tell the user that db=3  is empty
 def db3_is_empty2():
-    """
+    '''
     This function will tell the user that db=3 is empty
 
     Input:
@@ -213,7 +213,7 @@ def db3_is_empty2():
 
     Output:
        (string) that tells the user that db=3 is empty after it  was successfully deleted
-    """
+    '''
 
     return f'''
 
@@ -237,12 +237,14 @@ def db4_is_empty():
 
     return f'''
 
-The database that contains all the jobs that have been done by the api is empty. If you want to 
-instantiate some jobs, then call the different routes so they can be added to this database.
+[ERROR]: The database that contains all the job ids is empty. There must be a job instantiated
+in order to use this route and have a return value. Try using this route again when a job has been instantiated.
+Run the following command to instantiate your job:
 
+                       curl -X GET localhost:5031/job/result/<jid>
 '''
 
-#This function will tell the user that db=2 is empty
+# This function tells the user that db = 2 is empty
 def db2_is_empty():
     """
     This function will tell the user that db=2 is now empty

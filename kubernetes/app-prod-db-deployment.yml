@@ -28,4 +28,3 @@ spec:
       - name: abdon01-prod-pvc
         persistentVolumeClaim:
           claimName: abdon01-prod-pvc
-

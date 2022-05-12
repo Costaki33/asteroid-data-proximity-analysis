@@ -327,7 +327,7 @@ This will show the route requested and its respective job id. The user can copy 
 ```bash
 [funky@mnky ~]curl -X GET localhost:5031/job/result/<job_id>
 ```
-Refer back to the example above a visual example of the above mentioned commands
+Refer back to the example above as visual example of the [above](### Help Message) mentioned commands
 # Files 
 
 

@@ -170,7 +170,7 @@ def db4_is_empty():
 in order to use this route. Try using this route again when a job has been instantiated.
 Run the following command to instantiate your job:
 
-                      curl -X GET localhost:5036/job/result/<jid>
+                      curl -X GET localhost:5031/job/result/<jid>
 
 
 '''

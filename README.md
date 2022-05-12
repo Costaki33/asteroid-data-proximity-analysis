@@ -155,9 +155,11 @@ COMMAND:               HTTP METHOD:
 COMMAND:              HTTP METHOD
 --------------------------------------------------------------------------------------
 /job/result/<jid>        GET     [This route returns the appropate result back to the user when a job id is inputted]
+```
 
 **Note:**
 When you have selected a command you would like to run, you be provided with a Job ID (jid). You need this jid to result list you want to observe 
+
 ```bash
 
 

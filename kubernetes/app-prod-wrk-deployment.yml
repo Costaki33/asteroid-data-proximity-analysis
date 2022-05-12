@@ -17,15 +17,13 @@ spec:
         username: abdon01
         env: prod
         app: abdon01-prod-wrk
-   spec:
+    spec:
       containers:
-        - name: apidep
+        - name: wrkdep
           imagePullPolicy: Always
           image: costaki33/asteroid-data-wrk:0.1
           env:
-          - name: FLASK_APP
-            value: "app.py"
-          ports:
-          - name: http
-            containerPort: 5000
-
+          - name: WORKER_APP
+            value: "worker.py"
+          - name: REDIS_IP
+            value: "10.108.245.241"

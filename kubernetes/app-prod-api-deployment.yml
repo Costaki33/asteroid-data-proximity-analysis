@@ -17,7 +17,7 @@ spec:
         username: abdon01
         env: prod
         app: abdon01-prod-api
-   spec:
+    spec:
       containers:
         - name: apidep
           imagePullPolicy: Always
@@ -25,6 +25,8 @@ spec:
           env:
           - name: FLASK_APP
             value: "app.py"
+          - name: REDIS_IP
+            value: "10.108.245.241"
           ports:
           - name: http
             containerPort: 5000

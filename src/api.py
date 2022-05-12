@@ -405,6 +405,32 @@ def list_diameters():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/diameters')
 
+"""
+# This route returns a png of the bell curve of all the diameters
+@app.route("/job/diameter/gaussian_distribution", method = ['GET', 'PUT', 'POST', 'DELETE'])
+def bell_curve_diam():
+
+    # checking that db 0 is populated
+    if(len(jobs.rd.keys()) == 0):
+        return print_errors.db0_is_empty('curl -x GET localhost:5031/job/diameter/guassian_distribution')
+
+    # making sure that user is calling GET
+    if(request.method == 'GET'):
+        #Adds it to the queue, jdb, it will determine at the very end it iwll return a string or a list
+        job_dict = jobs.add_job('/job/diameter/guassian_distribution', 'list')
+        jid = job_dict['id']
+
+        #We are going to add the job_id into a new redis database, and the route as the key value
+        jobs.job_list.set('/job/diameter/guassian_distribution', jid)
+
+        #Returns a confirmation string back to the user
+        return print_errors.job_confi('curl -X GET localhost:5031/job/diameter/guassian_distribution', jid)
+
+    else:
+        return print_errors.error('curl -X GET localhost:5036/job/diameter/guassian_distribution')
+
+"""
+
 
 # this route returns the name and value of the asteroid with the largest diameter
 @app.route("/job/diameters/max", methods =['GET', 'PUT', 'POST', 'DELETE'])

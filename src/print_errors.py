@@ -203,8 +203,9 @@ Run the following command to instantiate your job:
 '''
 
 
-#This function will tell the user that db=3  is empty
+# This function tells the user that db = 3 is empty, returning a info message
 def db3_is_empty2():
+
     '''
     This function will tell the user that db=3 is empty
 
@@ -212,32 +213,37 @@ def db3_is_empty2():
        (none)
 
     Output:
-       (string) that tells the user that db=3 is empty after it  was successfully deleted
+       INFO message (string): Tells the user that db = 3 is empty after it was successfully deleted
+
     '''
 
     return f'''
 
-The database that contains all the results for the job instantiations is now empty, after everythig was deleted. 
-Instantiate a job first in order to get a valid answer. Then try the following command once again.
-                      curl -X GET localhost:5036/job/result/<jid>
+[INFO]: The database that contains all the job instantiations is now empty after the deletion everything inside the databse. There must now be a job instantiated
+in order to use this route and have a return value. Try using this route again when a job has been instantiated:
+
+                       curl -X GET localhost:5031/job/result/<jid>
 
 '''
 
-#This function will tell the user that db=4 is empty, so there is no pending jobs that have been added
+# This function notifying the user that db=4 is empty, so there is no pending jobs that have been added
 def db4_is_empty():
-    """
+    
+    '''
+    
     This function will tell the user that db=4 is empty
 
     Input:
        (None)
 
     Output:
-        (String) that tells the user that db=4 is empty
-    """
+        INFO message (string): Tells the user that db = 4 is empty, needs a job instantiated
+   
+    '''
 
     return f'''
 
-[ERROR]: The database that contains all the job ids is empty. There must be a job instantiated
+[INFO]: The database that contains all the job ids is empty. There must be a job instantiated
 in order to use this route and have a return value. Try using this route again when a job has been instantiated.
 Run the following command to instantiate your job:
 
@@ -246,37 +252,49 @@ Run the following command to instantiate your job:
 
 # This function tells the user that db = 2 is empty
 def db2_is_empty():
-    """
-    This function will tell the user that db=2 is now empty
+    '''
+    This function tells the user that db = 2 is now empty
 
     Input:
        (none)
 
     Output:
-       (string): It will be a string telling the user that db=2 is empty
-    """
+       INFO message(string): String notifying the user that db = 2 is empty
+    
+    '''
 
     return f'''
 
-The database that contained all the job keys and job dictionaries has be emptied out. If you want to 
-instantiate some jobs. then call different routes so they can be added to this database.
+[INFO]: The database that contained all the job keys and job dictionaries has now be emptied out. If you would like to 
+instantiate some jobs, call different routes so they can be added to this database so their jobs can be queried.
+Run the following command to find a list of commands you can call instantiate a job you would like to run:
+
+                       curl -X GET localhost:5031/
 
 '''
 
+
+# This function tells the user that the return value requested has not been complete yet
 def return_not_finished(jid):
-    """
-    This function will tell the user that the return value has not been complete yet.
+    
+    '''
+    
+    This function tells the user that the return value has not been complete yet but is running in the background.
 
     Input:
-        jid (string): It is the jid that was created
+        jid (string): The jid that was created for the queried job
 
     Output:
-       (string): It will return a string to the user telling them that they need to wait.
-    """
+       INFO message(string): Return a string, telling the user that they need to wait for the job to be completed
+    
+    '''
+
     return f'''
     
-The return value for the curl below has not been complete.
-                   curl -X localhost:5036/job/result/{jid}
-Give the program a few seconds then retry the command from above once again.
+[INFO]: The return value for the requested curl command below has not been completed yet:
+
+                   curl -X localhost:5031/job/result/{jid}
+
+Please allow the program a few seconds to complete the job, then retry the command above once again to see your result
 
 '''

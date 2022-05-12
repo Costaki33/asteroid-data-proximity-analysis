@@ -91,6 +91,11 @@ def list_diameters(jid):
         currentdict = json.loads(jobs.rd.get(item))
         
         #adding 'diameter' into the list
+        #Gets rid of all names that have nothing inside
+        if(currentdict['diameter'] == ''):
+            continue
+        
+
         diameter_list.append(currentdict['diameter'])
 
     #adding the return to the answers db
@@ -141,6 +146,10 @@ def list_neos(jid):
 
         #checking if the 'neo' value is a Y
         if currentdict['neo'] == 'Y':
+            #Gets rid of all names that have nothing inside
+            if(currentdict['name'] == ''):
+                continue
+            
             neo_list.append(currentdict['name'])
 
 
@@ -177,6 +186,9 @@ def list_phas(jid):
 
         #checking if the 'pha' value is 'Y'
         if currentdict['pha'] == 'Y':
+            #Gets rid of all names that have nothing inside
+            if(currentdict['name'] == ''):
+                continue
             #append the name if hte asteroid that is pha
             pha_list.append(currentdict['name'])
 

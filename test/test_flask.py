@@ -1,5 +1,9 @@
 import pytest, requests as rqs
 import requests
+import json
+import os
+import time
+import re
 
 
 '''
@@ -10,14 +14,14 @@ This script is a unit testing environment where we can test that all the functio
 
 host = 'localhost'
 port_num = '5031'
-curl = f'http://{host}:{port}'
+curl = f'http://{host}:{port_num}'
 
 def test_data_download():
 
     route = f'{curl}/data'
     result_response = requests.post(route)
     assert response.ok == True
-    assert response.content == b'
+    assert response.content == b'''
 
 --- Asteroid Proximity Data Query Program ---
 
@@ -56,7 +60,7 @@ COMMAND:              HTTP METHOD
 /job/result/<jid>        GET     [This route returns the appropate result back to the user when a job id is inputted]
 
 
-'
+'''
 
 
 

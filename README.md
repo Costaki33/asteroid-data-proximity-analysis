@@ -156,9 +156,30 @@ COMMAND:              HTTP METHOD
 --------------------------------------------------------------------------------------
 /job/result/<jid>        GET     [This route returns the appropate result back to the user when a job id is inputted]
 
+**Note:**
+When you have selected a command you would like to run, you be provided with a Job ID (jid). You need this jid to result list you want to observe 
+```bash
+
+
+[INFO]: The requested job has been succesfully been added to the job queue for the follwing curl command:
+
+                                curl -X GET localhost:5031/job/data/read
+
+The job id (jid) for the following job is:
+
+                                9ab5da39-b95e-41ba-bb79-df027f01b44a
+
+NOTE: The jid is very important. In order to view the results of your curl command, dont lose it.
+
+If you forget the jid, use the following command below to show all the saved job ids:
+
+                                curl -X GET localhost:5031/stored/job-ids
+[funky@mnky ~] curl -X GET localhost:5031/job/result/9ab5da39-b95e-41ba-bb79-df027f01b44a
+```
+You must do this for every job you query. There is a list of stored job-ids you can reference if you query multiple jobs. 
 
 ```
-
+### Creating new data 
 In order to create new data into the ``redis`` database that stores your requested value, the command is as follows:
 
 ```bash
@@ -170,44 +191,142 @@ This will add the dataset to the server, where all of the raw data is stored int
 The data has been successfully been stored in redis, in db=0
 ```
 
-
+### Reading the existing data in the database 
 To read the existing data in the database, perform the command:
-```ruby
-curl -X GET localhost:5006/job/data/read
+```bash
+[funky@mnky ~]curl -X GET localhost:5031/job/data/read
 ```
-This returns a list of dictionaries of asteroid information in the dataset for the user to sift through.
+This returns a list of dictionaries of asteroid information in the dataset for the user to sift through:
+```bash
+  {
+    "H": "12.4",
+    "a": "3.00501298539988",
+    "ad": "3.27932327705013",
+    "albedo": "0.205",
+    "class": "MBA",
+    "diameter": "11.146",
+    "diameter_sigma": "0.263",
+    "e": ".09128422838204392",
+    "epoch": "2459000.5",
+    "epoch_cal": "20200531.0000000",
+    "epoch_mjd": "59000",
+    "equinox": "J2000",
+    "full_name": "  6937 Valadon (1010 T-2)",
+    "i": "9.514736870524372",
+    "id": "a0006937",
+    "ma": "178.1723511111374",
+    "moid": "1.7423",
+    "moid_ld": "678.050891",
+    "n": ".1892058431368658",
+    "name": "Valadon",
+    "neo": "N",
+    "om": "203.276045030872",
+    "orbit_id": "JPL 35",
+    "pdes": "6937",
+    "per": "1902.689652874974",
+    "per_y": "5.20928036379185",
+    "pha": "N",
+    "prefix": "",
+    "q": "2.73070269374963",
+    "rms": ".47698",
+    "sigma_a": "1.5942E-8",
+    "sigma_ad": "1.7397E-8",
+    "sigma_e": "4.4594E-8",
+    "sigma_i": "5.1189E-6",
+    "sigma_ma": "2.5341E-5",
+    "sigma_n": "1.5056E-9",
+    "sigma_om": "2.5346E-5",
+    "sigma_per": "1.5141E-5",
+    "sigma_q": "1.3247E-7",
+    "sigma_tp": ".00013271",
+    "sigma_w": "3.5453E-5",
+    "spkid": "2006937",
+    "tp": "2458058.814753090089",
+    "tp_cal": "20171101.3147531",
+    "w": "324.4727821109635"
+  },
+  {
+    "H": "12.3",
+    "a": "2.468093230171911",
+    "ad": "2.983793222788395",
+    "albedo": "0.610",
+    "class": "MBA",
+    "diameter": "6.084",
+    "diameter_sigma": "0.291",
+    "e": ".2089467230460184",
+    "epoch": "2459000.5",
+    "epoch_cal": "20200531.0000000",
+    "epoch_mjd": "59000",
+    "equinox": "J2000",
+    "full_name": "  3958 Komendantov (1953 TC)",
+    "i": "4.82425120797704",
+    "id": "a0003958",
+    "ma": "47.72722845399516",
+    "moid": ".962024",
+    "moid_ld": "374.39088008",
+    "n": ".2541919148520257",
+    "name": "Komendantov",
+    "neo": "N",
+    "om": "11.62673870639676",
+    "orbit_id": "JPL 31",
+    "pdes": "3958",
+    "per": "1416.252756149104",
+    "per_y": "3.87748872320083",
+    "pha": "N",
+    "prefix": "",
+    "q": "1.952393237555428",
+    "rms": ".40468",
+    "sigma_a": "8.6625E-9",
+    "sigma_ad": "1.0472E-8",
+    "sigma_e": "3.8273E-8",
+    "sigma_i": "4.8224E-6",
+    "sigma_ma": "8.963E-6",
+    "sigma_n": "1.3382E-9",
+    "sigma_om": "3.4709E-5",
+    "sigma_per": "7.4561E-6",
+    "sigma_q": "9.4095E-8",
+    "sigma_tp": "3.543E-5",
+    "sigma_w": "3.647E-5",
+    "spkid": "2003958",
+    "tp": "2458812.739392107421",
+    "tp_cal": "20191125.2393921",
+    "w": "29.25649653950637"
+  }
+]
+```
 
+### Updating the existing data
 If the user wishes to update existing data:
-```ruby
-curl -X POST localhost:5006/data
+```bash
+[funky@mnky ~]curl -X POST localhost:5031/data
 ```
-The `POST` option indicates that the user is requesting to add data in the database. A message indicating the success of the operation will be returned as an output.
+The `POST` option indicates that the user is requesting to add data in the database. A message indicating the success of the operation will be returned as an output:
 
+### Deleting the existing data
 In order to delete data from the database, perform:
-```ruby
-curl -X DELETE localhost:5006/data/reset
+```bash
+[funky@mnky ~]curl -X DELETE localhost:5031/data/reset
 ```
-A message to the user will display that the operation was successful.
-
-job stuff:
+A message to the user will display that the operation was successful
 
 Once the database is populated, curl commands can be made so the program can perform the respective, queried routes.
 
+### Curl commands 
 Calling routes for the functions creates a new job for the program:
-```ruby
-curl -X GET localhost:5006/job/<route>
+```bash
+[funky@mnky ~]curl -X GET localhost:5031/job/<route>
 ```
 The program will create a `job id` to the corresponding route that was called, which is stored in the `job-ids` in the database.
 In order to see the contents of the list that stores this information:
-```ruby
-curl -X GET localhost:5006/stored/job-ids
+```bash
+[funky@mnky ~]curl -X GET localhost:5031/stored/job-ids
 ```
 
 This will show the route requested and its respective job id. The user can copy the job id and perform the following to recieve the requested output
-```ruby
-curl -X GET localhost:5006/job/result/<job_id>
+```bash
+[funky@mnky ~]curl -X GET localhost:5031/job/result/<job_id>
 ```
-
+Refer back to the example above a visual example of the above mentioned commands
 # Files 
 
 

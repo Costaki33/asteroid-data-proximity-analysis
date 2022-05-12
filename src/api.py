@@ -405,7 +405,7 @@ def list_diameters():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/diameters')
 
-"""
+'''
 # This route returns a png of the bell curve of all the diameters
 @app.route("/job/diameter/gaussian_distribution", method = ['GET', 'PUT', 'POST', 'DELETE'])
 def bell_curve_diam():
@@ -429,7 +429,7 @@ def bell_curve_diam():
     else:
         return print_errors.error('curl -X GET localhost:5036/job/diameter/guassian_distribution')
 
-"""
+'''
 
 
 # this route returns the name and value of the asteroid with the largest diameter

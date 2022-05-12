@@ -180,7 +180,6 @@ If you forget the jid, use the following command below to show all the saved job
 ```
 You must do this for every job you query. There is a list of stored job-ids you can reference if you query multiple jobs. 
 
-```
 ### Creating new data 
 In order to create new data into the ``redis`` database that stores your requested value, the command is as follows:
 

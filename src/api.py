@@ -60,7 +60,7 @@ def load_asteroid_data_into_redis() -> str:
             for row in dataset:
                 data['asteroid_data'].append(dict(row))
                 count = count + 1
-                if(count == 10000):
+                if(count == 1000):
                     break
 
             #Populating the redis db=0

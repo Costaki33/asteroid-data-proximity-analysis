@@ -17,12 +17,20 @@ host = 'localhost'
 port_num = '5031'
 curl = f'http://{host}:{port_num}'
 
+
+
+# This function tests to see if the welcome_message had passed correctly 
 def test_welcome_message():
 
-    route = f'{curl}/'
-    result_response = requests.get(route)
-    assert result_response.ok == True
-    assert result_response.content == b'''
+     '''
+     
+     This function tests to see if the welcome_message() function correctly has passed successfully by asserting the successful output has been outputted 
+
+     '''
+     route = f'{curl}/'
+     result_response = requests.get(route)
+     assert result_response.ok == True
+     assert result_response.content == b'''
 
 --- Asteroid Proximity Data Query Program ---
 
@@ -63,12 +71,32 @@ COMMAND:              HTTP METHOD
 
 '''
 
+# This function tests to see if the dataset has been uploaded correctly to redis
+def test_load_asteroid_data_into_redis():
+
+    '''
+    
+    This function tests to see that the dataset has been succesfully loaded into the Redis database
+
+    '''
+
+    route = f'{curl}/data'
+    result_response = requests.post(route)
+    assert result_response.ok == True
+    assert result_response.content == b'\n\nThe data has been successfully been stored in redis, in db=0\n\n'
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 if __name__ == "__main__":
     pytest.main()
-
-
-
-

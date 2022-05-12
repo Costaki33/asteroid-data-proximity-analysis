@@ -86,22 +86,23 @@ def test_load_asteroid_data_into_redis():
     assert result_response.ok == True
     assert result_response.content == b'\n\nThe data has been successfully been stored in redis, in db=0\n\n'
 
-'''
-This function tests that a job was properly cycled through
+
+# This function tests that a job was properly cycled through
 def test_jobs_cycle():
 
-    
+    '''    
 
-    #This function tests to see that the jobs has successfully been cycled through    
+    This function tests to see that the jobs has successfully been cycled through    
 
-    
+    '''
 
-    route = f'{curl}/jobs'
+    route = f'{curl}/job/diameters/max'
+    job_data = {} #unsure what data to put in here besides the actual max value, being 939.4
     result_response = requests.get(route)
     assert result_response.ok == True
     assert result_response.status_code == 200
-    assert bool(re.search('To submit a job, do the following', response.text)) == True
-'''
+    #assert bool(re.search('To submit a job, do the following', response.text)) == True
+    assert result_response.content == b'\n\n' + 'The largest asteroid diameter is: ' + str(max(diameter_list)) + '\n\n'
 
 
 
